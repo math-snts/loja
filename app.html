@@ -1,1489 +1,2629 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - Controle de Loja</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    :root {
-      --primary-color: #0d6efd;
-      --success-color: #198754;
-      --warning-color: #ffc107;
-      --danger-color: #dc3545;
-      --info-color: #0dcaf0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Controle de Loja</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --success-color: #198754;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #0dcaf0;
+        }
 
-    body {
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      min-height: 100vh;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    .navbar {
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, var(--primary-color) 0%, #0b5ed7 100%) !important;
+        }
 
-    .navbar-brand {
-      font-weight: 700;
-      font-size: 1.5rem;
-      color: white !important;
-    }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
 
-    .nav-tabs {
-      border-bottom: 2px solid #dee2e6;
-      margin-bottom: 1.5rem;
-    }
+        .nav-tabs {
+            border-bottom: 2px solid #dee2e6;
+            margin-bottom: 1.5rem;
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+        }
 
-    .nav-tabs .nav-link {
-      border: none;
-      border-radius: 8px 8px 0 0;
-      padding: 0.75rem 1.5rem;
-      font-weight: 500;
-      color: #6c757d;
-      margin-right: 0.25rem;
-    }
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: 0;
+            padding: 1rem 1.5rem;
+            font-weight: 500;
+            color: #6c757d;
+            margin-right: 0;
+            border-bottom: 3px solid transparent;
+        }
 
-    .nav-tabs .nav-link.active {
-      background: var(--primary-color);
-      color: white;
-      border-color: var(--primary-color);
-    }
+        .nav-tabs .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+            border-bottom-color: #0b5ed7;
+        }
 
-    .nav-tabs .nav-link:hover {
-      color: var(--primary-color);
-      background: rgba(13, 110, 253, 0.05);
-    }
+        .nav-tabs .nav-link:hover {
+            color: var(--primary-color);
+            background: rgba(13, 110, 253, 0.05);
+            border-bottom-color: var(--primary-color);
+        }
 
-    .card {
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      margin-bottom: 1.5rem;
-      overflow: hidden;
-    }
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
 
-    .card-header {
-      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-      border: none;
-      font-weight: 600;
-      color: #495057;
-      padding: 1rem 1.5rem;
-    }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
 
-    .card-body {
-      padding: 1.5rem;
-    }
+        .card-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: none;
+            font-weight: 600;
+            color: #495057;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .stat-card {
-      border-radius: 12px;
-      color: white;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      height: 100px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
+        .card-body {
+            padding: 1.5rem;
+        }
 
-    .stat-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    }
+        .stat-card {
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .stat-card h5 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin: 0;
-    }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
 
-    .stat-card small {
-      opacity: 0.9;
-      font-size: 0.85rem;
-    }
+        .stat-card:hover::before {
+            left: 100%;
+        }
 
-    .table {
-      margin-bottom: 0;
-    }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
 
-    .table th {
-      background: #f8f9fa;
-      font-weight: 600;
-      color: #495057;
-      border-top: none;
-      padding: 1rem 0.75rem;
-      font-size: 0.9rem;
-    }
+        .stat-card h5 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
 
-    .table td {
-      padding: 0.75rem;
-      vertical-align: middle;
-      border-color: #f1f3f4;
-    }
+        .stat-card small {
+            opacity: 0.9;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
 
-    .table-hover tbody tr:hover {
-      background-color: rgba(13, 110, 253, 0.03);
-    }
+        .table {
+            margin-bottom: 0;
+            font-size: 0.95rem;
+        }
 
-    .btn {
-      border-radius: 6px;
-      font-weight: 500;
-      padding: 0.5rem 1rem;
-      margin: 0.125rem;
-      border: none;
-    }
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+            border-top: none;
+            padding: 1rem 0.75rem;
+            font-size: 0.9rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
 
-    .btn-sm {
-      padding: 0.25rem 0.75rem;
-      font-size: 0.8rem;
-    }
+        .table td {
+            padding: 0.875rem 0.75rem;
+            vertical-align: middle;
+            border-color: #f1f3f4;
+        }
 
-    .form-control, .form-select {
-      border-radius: 8px;
-      border: 1px solid #dee2e6;
-      padding: 0.625rem 0.75rem;
-      font-size: 0.95rem;
-    }
+        .table-hover tbody tr:hover {
+            background-color: rgba(13, 110, 253, 0.03);
+        }
 
-    .form-control:focus, .form-select:focus {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
-    }
+        .btn {
+            border-radius: 6px;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            margin: 0 0.125rem;
+            border: none;
+            transition: all 0.2s ease;
+        }
 
-    .badge {
-      font-size: 0.8rem;
-      padding: 0.4em 0.6em;
-    }
+        .btn:hover {
+            transform: translateY(-1px);
+        }
 
-    .low-stock {
-      background: #fff3cd !important;
-      color: #856404 !important;
-    }
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.8rem;
+        }
 
-    .alert-fixed {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 9999;
-      min-width: 300px;
-      max-width: 400px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
+        .form-control,
+        .form-select {
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            padding: 0.625rem 0.75rem;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
 
-    .loading {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 2px solid #ffffff20;
-      border-top: 2px solid #fff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-right: 0.5rem;
-    }
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+            transform: translateY(-1px);
+        }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+        .badge {
+            font-size: 0.8rem;
+            padding: 0.4em 0.6em;
+            border-radius: 12px;
+        }
 
-    @media (max-width: 768px) {
-      .stat-card h5 {
-        font-size: 1.25rem;
-      }
-      
-      .nav-tabs .nav-link {
-        padding: 0.5rem 0.75rem;
-        font-size: 0.9rem;
-      }
-      
-      .table {
-        font-size: 0.9rem;
-      }
-      
-      .table th, .table td {
-        padding: 0.5rem 0.25rem;
-      }
-    }
+        .low-stock {
+            background: linear-gradient(135deg, #ffc107, #ffb300) !important;
+            color: #856404 !important;
+            animation: pulse 2s infinite;
+        }
 
-    /* Scrollbar customizada */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7);
+            }
 
-    ::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 4px;
-    }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 193, 7, 0);
+            }
 
-    ::-webkit-scrollbar-thumb {
-      background: var(--primary-color);
-      border-radius: 4px;
-    }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+            }
+        }
 
-    ::-webkit-scrollbar-thumb:hover {
-      background: #0b5ed7;
-    }
-  </style>
+        .alert-fixed {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 320px;
+            max-width: 400px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9998;
+            backdrop-filter: blur(2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #6c757d;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            opacity: 0.5;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.25rem;
+            }
+
+            .nav-tabs .nav-link {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .stat-card h5 {
+                font-size: 1.25rem;
+            }
+
+            .table {
+                font-size: 0.85rem;
+            }
+
+            .table th,
+            .table td {
+                padding: 0.5rem 0.25rem;
+            }
+
+            .card-body {
+                padding: 1rem;
+            }
+        }
+
+        /* Scrollbar customizada */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary-color), #0b5ed7);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #0b5ed7, #0a58ca);
+        }
+    </style>
 </head>
+
 <body>
-  <!-- Verificação de autenticação -->
-  <div id="loadingScreen" class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
-    <div class="text-center">
-      <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
-      <div class="text-muted">Carregando sistema...</div>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="text-center">
+            <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+            <div class="text-primary fw-semibold">Carregando dados...</div>
+            <small class="text-muted">Aguarde enquanto inicializamos o sistema</small>
+        </div>
     </div>
-  </div>
 
-  <!-- App Principal (escondido inicialmente) -->
-  <div id="appMain" style="display: none;">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-          <span class="me-2">🏪</span>Controle de Loja
-        </a>
-        <div class="navbar-nav ms-auto align-items-center">
-          <span class="navbar-text me-3 text-white-50">
-            <span class="me-1">👤</span><span id="userName">Carregando...</span>
-          </span>
-          <button class="btn btn-outline-light btn-sm" onclick="logout()">
-            <span class="me-1">🚪</span>Sair
-          </button>
-        </div>
-      </div>
-    </nav>
-
-    <div class="container-fluid mt-4">
-      <!-- Tabs de Navegação -->
-      <ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab">
-            <span class="me-1">📊</span>Dashboard
-          </button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="produtos-tab" data-bs-toggle="tab" data-bs-target="#produtos" type="button" role="tab">
-            <span class="me-1">📦</span>Produtos
-          </button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="movimentacoes-tab" data-bs-toggle="tab" data-bs-target="#movimentacoes" type="button" role="tab">
-            <span class="me-1">📋</span>Movimentações
-          </button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="config-tab" data-bs-toggle="tab" data-bs-target="#config" type="button" role="tab">
-            <span class="me-1">⚙️</span>Configurações
-          </button>
-        </li>
-      </ul>
-
-      <div class="tab-content" id="mainTabContent">
-        <!-- Dashboard Tab -->
-        <div class="tab-pane fade show active" id="dashboard" role="tabpanel">
-          <!-- Filtros -->
-          <div class="row g-3 mb-4">
-            <div class="col-md-3">
-              <label class="form-label fw-semibold">Filtro por Canal</label>
-              <select id="filterCanal" class="form-select">
-                <option value="todos">👁️ Todos os canais</option>
-                <option value="online">🛒 Online</option>
-                <option value="fisica">🏪 Loja Física</option>
-              </select>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label fw-semibold">Período</label>
-              <select id="filterPeriodo" class="form-select">
-                <option value="">📅 Todos os períodos</option>
-                <option value="hoje">📅 Hoje</option>
-                <option value="semana">📋 Esta Semana</option>
-                <option value="mes">📊 Este Mês</option>
-              </select>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label fw-semibold">Data Base</label>
-              <input type="date" id="filterData" class="form-control" style="display: none;">
-            </div>
-            <div class="col-md-3 d-flex align-items-end">
-              <button class="btn btn-primary w-100" onclick="loadDashboard()">
-                <span class="me-2">🔄</span>Atualizar Dashboard
-              </button>
-            </div>
-          </div>
-
-          <!-- Cards de Estatísticas -->
-          <div class="row g-3 mb-4">
-            <div class="col-md-3">
-              <a href="#" class="stat-card text-white text-decoration-none bg-primary" onclick="loadDashboard()">
-                <h5 id="totalVendas">0</h5>
-                <small>Vendas Hoje</small>
-              </a>
-            </div>
-            <div class="col-md-3">
-              <a href="#" class="stat-card text-white text-decoration-none bg-success" onclick="loadDashboard()">
-                <h5 id="totalLucro">R$ 0,00</h5>
-                <small>Lucro Total</small>
-              </a>
-            </div>
-            <div class="col-md-3">
-              <a href="#" class="stat-card text-white text-decoration-none bg-info" onclick="loadProdutos()">
-                <h5 id="totalProdutos">0</h5>
-                <small>Produtos</small>
-              </a>
-            </div>
-            <div class="col-md-3">
-              <a href="#" class="stat-card text-white text-decoration-none bg-warning" onclick="loadDashboard()">
-                <h5 id="totalEstoque">0</h5>
-                <small>Estoque Total</small>
-              </a>
-            </div>
-          </div>
-
-          <!-- Tabela de Movimentações -->
-          <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-              <h6 class="mb-0 fw-semibold">
-                <span class="me-2">📋</span>Últimas Movimentações
-              </h6>
-              <div>
-                <button class="btn btn-sm btn-outline-success me-2" onclick="exportCSV()">
-                  <span class="me-1">📥</span>Exportar
-                </button>
-                <button class="btn btn-sm btn-outline-primary" onclick="loadDashboard()">
-                  <span class="me-1">🔄</span>Atualizar
-                </button>
-              </div>
-            </div>
-            <div class="card-body p-0">
-              <div class="table-responsive">
-                <table class="table mb-0">
-                  <thead class="table-dark">
-                    <tr>
-                      <th style="width: 12%;">Data/Hora</th>
-                      <th style="width: 25%;">Produto</th>
-                      <th style="width: 10%;">Tipo</th>
-                      <th style="width: 8%;">Qtd.</th>
-                      <th style="width: 12%;">Canal</th>
-                      <th style="width: 15%;">Valor (R$)</th>
-                      <th style="width: 15%;">Lucro (R$)</th>
-                    </tr>
-                  </thead>
-                  <tbody id="dashboardTable">
-                    <tr>
-                      <td colspan="7" class="text-center py-4 text-muted">
-                        <div class="spinner-border spinner-border-sm me-2" role="status"></div>
-                        Carregando movimentações...
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Produtos Tab -->
-        <div class="tab-pane fade" id="produtos" role="tabpanel">
-          <div class="card">
-            <div class="card-header">
-              <h6 class="mb-0 fw-semibold">
-                <span class="me-2">📦</span>Gerenciar Produtos
-              </h6>
-            </div>
-            <div class="card-body">
-              <!-- Formulário de Produto -->
-              <div class="row g-3 mb-4">
-                <div class="col-md-8">
-                  <div class="row g-2">
-                    <div class="col-md-6">
-                      <input type="text" id="produtoNome" class="form-control" placeholder="Nome do produto (ex: Camiseta Azul)" required>
+    <!-- App Principal -->
+    <div id="appContainer">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <i class="fas fa-store me-2"></i>
+                    <span>Controle de Loja</span>
+                    <span class="badge bg-success ms-2" id="statusBadge">Online</span>
+                </a>
+                <div class="navbar-nav ms-auto align-items-center">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>
+                            <span id="userDisplay">Admin</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Configurações</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i
+                                        class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                        </ul>
                     </div>
-                    <div class="col-md-3">
-                      <input type="number" id="produtoCusto" class="form-control" step="0.01" placeholder="Custo R$" min="0" required>
-                    </div>
-                    <div class="col-md-3">
-                      <input type="number" id="produtoVenda" class="form-control" step="0.01" placeholder="Venda R$" min="0" required>
-                    </div>
-                  </div>
-                  <div class="mt-2">
-                    <input type="number" id="produtoEstoque" class="form-control" placeholder="Estoque inicial" min="0" value="0">
-                  </div>
                 </div>
-                <div class="col-md-4 d-flex align-items-end gap-2">
-                  <button class="btn btn-success flex-fill" onclick="saveProduto()">
-                    <span class="me-1">💾</span>Salvar Produto
-                  </button>
-                  <button class="btn btn-secondary flex-fill" onclick="clearProdutoForm()">
-                    <span class="me-1">🗑️</span>Limpar
-                  </button>
-                </div>
-              </div>
+            </div>
+        </nav>
 
-              <!-- Tabela de Produtos -->
-              <div class="table-responsive">
-                <table class="table table-hover">
-                  <thead class="table-light">
-                    <tr>
-                      <th>Nome</th>
-                      <th style="width: 12%;">Custo</th>
-                      <th style="width: 12%;">Venda</th>
-                      <th style="width: 10%;">Estoque</th>
-                      <th style="width: 15%;">Lucro Unit.</th>
-                      <th style="width: 18%;">Ações</th>
-                    </tr>
-                  </thead>
-                  <tbody id="produtosTable">
-                    <tr>
-                      <td colspan="6" class="text-center py-4 text-muted">
-                        Nenhum produto cadastrado. Adicione o primeiro!
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Movimentações Tab -->
-        <div class="tab-pane fade" id="movimentacoes" role="tabpanel">
-          <div class="card">
-            <div class="card-header">
-              <h6 class="mb-0 fw-semibold">
-                <span class="me-2">📋</span>Registrar Nova Movimentação
-              </h6>
-            </div>
-            <div class="card-body">
-              <div class="row g-3">
-                <div class="col-md-4">
-                  <label class="form-label fw-semibold">Produto</label>
-                  <select id="movProduto" class="form-select" required>
-                    <option value="">Selecione um produto...</option>
-                  </select>
-                </div>
-                <div class="col-md-2">
-                  <label class="form-label fw-semibold">Tipo</label>
-                  <select id="movTipo" class="form-select">
-                    <option value="entrada">📥 Entrada</option>
-                    <option value="saida">📤 Saída</option>
-                  </select>
-                </div>
-                <div class="col-md-2">
-                  <label class="form-label fw-semibold">Canal</label>
-                  <select id="movCanal" class="form-select">
-                    <option value="online">🛒 Online</option>
-                    <option value="fisica">🏪 Física</option>
-                  </select>
-                </div>
-                <div class="col-md-2">
-                  <label class="form-label fw-semibold">Quantidade</label>
-                  <input type="number" id="movQuantidade" class="form-control" value="1" min="1" required>
-                </div>
-                <div class="col-md-2 d-flex align-items-end">
-                  <button class="btn btn-primary w-100" onclick="saveMovimentacao()">
-                    <span class="me-1">💾</span>Registrar
-                  </button>
-                </div>
-              </div>
-              
-              <div class="mt-3 p-3 bg-light rounded">
-                <h6 class="mb-2">ℹ️ Como usar:</h6>
-                <ul class="mb-0 small text-muted">
-                  <li><strong>Entrada:</strong> Adiciona ao estoque (compras)</li>
-                  <li><strong>Saída:</strong> Remove do estoque (vendas)</li>
-                  <li>Verifique o estoque antes de registrar saídas</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Configurações Tab -->
-        <div class="tab-pane fade" id="config" role="tabpanel">
-          <div class="row g-4">
-            <div class="col-md-6">
-              <div class="card">
-                <div class="card-header">
-                  <h6 class="mb-0 fw-semibold">
-                    <span class="me-2">🔐</span>Conta de Usuário
-                  </h6>
-                </div>
-                <div class="card-body">
-                  <div class="mb-3">
-                    <label class="form-label">Usuário Atual</label>
-                    <input type="text" id="currentUser" class="form-control" readonly>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <button class="btn btn-outline-primary w-100" onclick="changePassword()">
-                        <span class="me-1">🔑</span>Mudar Senha
-                      </button>
-                    </div>
-                    <div class="col-md-6">
-                      <button class="btn btn-outline-secondary w-100" onclick="resetPassword()">
-                        <span class="me-1">🔄</span>Resetar Padrão
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div class="col-md-6">
-              <div class="card">
-                <div class="card-header">
-                  <h6 class="mb-0 fw-semibold">
-                    <span class="me-2">💾</span>Backup & Restauração
-                  </h6>
-                </div>
-                <div class="card-body">
-                  <div class="d-grid gap-2">
-                    <button class="btn btn-success" onclick="exportData('csv')">
-                      <span class="me-2">📊</span>Exportar CSV
+        <div class="container-fluid mt-4 px-3">
+            <!-- Tabs de Navegação -->
+            <ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard"
+                        type="button" role="tab">
+                        <i class="fas fa-chart-bar me-2"></i>Dashboard
                     </button>
-                    <button class="btn btn-info" onclick="exportData('json')">
-                      <span class="me-2">📄</span>Exportar JSON
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="produtos-tab" data-bs-toggle="tab" data-bs-target="#produtos"
+                        type="button" role="tab">
+                        <i class="fas fa-box me-2"></i>Produtos
                     </button>
-                    <label class="btn btn-outline-secondary">
-                      <span class="me-2">📤</span>Importar
-                      <input type="file" id="importFile" accept=".json,.csv" style="display: none;" onchange="importData(event)">
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="card mt-4">
-            <div class="card-header">
-              <h6 class="mb-0 fw-semibold">
-                <span class="me-2">🗑️</span>Limpeza de Dados
-              </h6>
-            </div>
-            <div class="card-body">
-              <div class="alert alert-warning">
-                <h6 class="alert-heading">⚠️ Atenção!</h6>
-                <p class="mb-2">A ação abaixo <strong>apagará todos os dados</strong> permanentemente:</p>
-                <ul class="mb-0 small">
-                  <li>📦 Todos os produtos</li>
-                  <li>📋 Todas as movimentações</li>
-                  <li>💰 Histórico de vendas e lucros</li>
-                </ul>
-              </div>
-              <button class="btn btn-danger w-100" onclick="clearAllData()">
-                <span class="me-2">🗑️</span>Limpar Todos os Dados
-              </button>
-            </div>
-          </div>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="movimentacoes-tab" data-bs-toggle="tab" data-bs-target="#movimentacoes"
+                        type="button" role="tab">
+                        <i class="fas fa-exchange-alt me-2"></i>Movimentações
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="relatorios-tab" data-bs-toggle="tab" data-bs-target="#relatorios"
+                        type="button" role="tab">
+                        <i class="fas fa-file-alt me-2"></i>Relatórios
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="config-tab" data-bs-toggle="tab" data-bs-target="#config" type="button"
+                        role="tab">
+                        <i class="fas fa-cog me-2"></i>Configurações
+                    </button>
+                </li>
+            </ul>
 
-          <div class="card mt-4">
-            <div class="card-body text-center">
-              <h6 class="text-muted">ℹ️ Sobre o Sistema</h6>
-              <p class="text-muted small">
-                <strong>Controle de Loja v2.0</strong><br>
-                Sistema local com armazenamento no navegador<br>
-                <a href="https://github.com/SEU_USUARIO/controle-loja" target="_blank" class="text-primary">Ver no GitHub</a>
-              </p>
+            <div class="tab-content" id="mainTabContent">
+                <!-- DASHBOARD -->
+                <div class="tab-pane fade show active" id="dashboard" role="tabpanel">
+                    <!-- Filtros -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-md-2">
+                                    <label class="form-label fw-semibold small mb-1">Canal</label>
+                                    <select id="filterCanal" class="form-select form-select-sm">
+                                        <option value="todos">👁️ Todos</option>
+                                        <option value="online">🛒 Online</option>
+                                        <option value="fisica">🏪 Física</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label fw-semibold small mb-1">Período</label>
+                                    <select id="filterPeriodo" class="form-select form-select-sm">
+                                        <option value="">📅 Todos</option>
+                                        <option value="hoje">📅 Hoje</option>
+                                        <option value="semana">📋 Semana</option>
+                                        <option value="mes">📊 Mês</option>
+                                        <option value="ano">📈 Ano</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label fw-semibold small mb-1">Data</label>
+                                    <input type="date" id="filterData" class="form-control form-control-sm"
+                                        style="display: none;">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-semibold small mb-1">Status</label>
+                                    <select id="filterStatus" class="form-select form-select-sm">
+                                        <option value="todos">📋 Todos</option>
+                                        <option value="saida">📤 Vendas</option>
+                                        <option value="entrada">📥 Compras</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-primary w-100" onclick="loadDashboard()">
+                                        <i class="fas fa-sync-alt me-1"></i>Atualizar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Estatísticas -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-lg-3 col-md-6">
+                            <div class="stat-card bg-primary">
+                                <h5 id="totalVendasHoje">0</h5>
+                                <small><i class="fas fa-shopping-cart me-1"></i>Vendas Hoje</small>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="stat-card bg-success">
+                                <h5 id="totalLucro">R$ 0,00</h5>
+                                <small><i class="fas fa-chart-line me-1"></i>Lucro Total</small>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="stat-card bg-info">
+                                <h5 id="totalProdutos">0</h5>
+                                <small><i class="fas fa-boxes me-1"></i>Produtos</small>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="stat-card bg-warning">
+                                <h5 id="totalEstoque">0</h5>
+                                <small><i class="fas fa-warehouse me-1"></i>Estoque</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico (placeholder) -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h6 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Vendas por Canal</h6>
+                        </div>
+                        <div class="card-body text-center p-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3"
+                                            style="width: 60px; height: 60px;">
+                                            <i class="fas fa-store text-white" style="font-size: 1.5rem;"></i>
+                                        </div>
+                                        <div>
+                                            <h5 id="vendasFisicas">0</h5>
+                                            <small class="text-muted">Loja Física</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <div class="bg-info rounded-circle d-flex align-items-center justify-content-center me-3"
+                                            style="width: 60px; height: 60px;">
+                                            <i class="fas fa-laptop text-white" style="font-size: 1.5rem;"></i>
+                                        </div>
+                                        <div>
+                                            <h5 id="vendasOnline">0</h5>
+                                            <small class="text-muted">Online</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <div class="bg-success rounded-circle d-flex align-items-center justify-content-center me-3"
+                                            style="width: 60px; height: 60px;">
+                                            <i class="fas fa-coins text-white" style="font-size: 1.5rem;"></i>
+                                        </div>
+                                        <div>
+                                            <h5 id="totalReceita">R$ 0,00</h5>
+                                            <small class="text-muted">Receita Total</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabela Principal -->
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 fw-semibold">
+                                <i class="fas fa-list me-2 text-primary"></i>
+                                Últimas Movimentações
+                                <span class="badge bg-secondary ms-2" id="movCountBadge">0</span>
+                            </h6>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button class="btn btn-outline-primary" onclick="exportCSV()">
+                                    <i class="fas fa-download me-1"></i>CSV
+                                </button>
+                                <button class="btn btn-outline-success" onclick="exportPDF()">
+                                    <i class="fas fa-file-pdf me-1"></i>PDF
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="printTable()">
+                                    <i class="fas fa-print me-1"></i>Imprimir
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th style="width: 14%;"><i class="fas fa-clock me-1"></i>Data</th>
+                                            <th style="width: 24%;"><i class="fas fa-tag me-1"></i>Produto</th>
+                                            <th style="width: 10%;"><i class="fas fa-exchange-alt me-1"></i>Tipo</th>
+                                            <th style="width: 8%;"><i class="fas fa-hashtag me-1"></i>Qtd</th>
+                                            <th style="width: 12%;"><i class="fas fa-store me-1"></i>Canal</th>
+                                            <th style="width: 16%;"><i class="fas fa-dollar-sign me-1"></i>Valor</th>
+                                            <th style="width: 16%;"><i class="fas fa-chart-line me-1"></i>Lucro</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dashboardTableBody">
+                                        <tr class="table-info">
+                                            <td colspan="7" class="text-center py-4">
+                                                <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                                                <span>Carregando movimentações...</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot class="table-dark">
+                                        <tr>
+                                            <td colspan="3" class="text-end fw-bold">TOTAL:</td>
+                                            <td id="totalQuantidade" class="fw-bold">0</td>
+                                            <td></td>
+                                            <td id="totalValor" class="fw-bold text-primary">R$ 0,00</td>
+                                            <td id="totalLucroFooter" class="fw-bold text-success">R$ 0,00</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRODUTOS -->
+                <div class="tab-pane fade" id="produtos" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0 fw-semibold">
+                                        <i class="fas fa-plus-circle me-2 text-success"></i>
+                                        Novo Produto
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <form id="produtoForm" onsubmit="return false;">
+                                        <div class="row g-3">
+                                            <div class="col-md-8">
+                                                <label class="form-label fw-semibold">Nome do Produto *</label>
+                                                <input type="text" id="produtoNome" class="form-control"
+                                                    placeholder="Ex: Camiseta Polo Azul" required>
+                                                <div class="form-text">Máximo 100 caracteres</div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold">Categoria</label>
+                                                <select id="produtoCategoria" class="form-select">
+                                                    <option value="">Geral</option>
+                                                    <option value="roupas">Roupas</option>
+                                                    <option value="acessorios">Acessórios</option>
+                                                    <option value="eletronicos">Eletrônicos</option>
+                                                    <option value="outros">Outros</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-semibold">Preço de Custo * <small
+                                                        class="text-muted">(R$)</small></label>
+                                                <input type="number" id="produtoCusto" class="form-control" step="0.01"
+                                                    min="0" placeholder="0.00" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-semibold">Preço de Venda * <small
+                                                        class="text-muted">(R$)</small></label>
+                                                <input type="number" id="produtoVenda" class="form-control" step="0.01"
+                                                    min="0" placeholder="0.00" required>
+                                                <div id="lucroCalculado" class="form-text small text-success"
+                                                    style="display: none;"></div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold">Estoque Inicial</label>
+                                                <input type="number" id="produtoEstoque" class="form-control" min="0"
+                                                    value="0" placeholder="0">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold">Ponto de Reposição</label>
+                                                <input type="number" id="produtoMinEstoque" class="form-control" min="0"
+                                                    value="5" placeholder="5">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold">Código de Barras</label>
+                                                <input type="text" id="produtoBarcode" class="form-control"
+                                                    placeholder="1234567890123">
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="d-flex gap-2">
+                                                    <button type="submit" class="btn btn-success">
+                                                        <i class="fas fa-save me-1"></i>Salvar Produto
+                                                    </button>
+                                                    <button type="button" class="btn btn-outline-secondary"
+                                                        onclick="clearProductForm()">
+                                                        <i class="fas fa-times me-1"></i>Limpar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h6 class="mb-0 fw-semibold">
+                                        <i class="fas fa-info-circle me-2 text-info"></i>
+                                        Dicas Rápidas
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-info small" role="alert">
+                                        <i class="fas fa-lightbulb me-2"></i>
+                                        <strong>O preço de venda</strong> deve ser maior que o custo para gerar lucro
+                                    </div>
+                                    <div class="alert alert-warning small" role="alert">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        Configure o <strong>ponto de reposição</strong> para receber alertas de estoque
+                                        baixo
+                                    </div>
+                                    <div class="alert alert-success small" role="alert">
+                                        <i class="fas fa-check-circle me-2"></i>
+                                        Use <strong>códigos de barras</strong> para agilizar o registro de vendas
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 fw-semibold">
+                                <i class="fas fa-list me-2"></i>Lista de Produtos
+                                <span class="badge bg-primary ms-2" id="produtosCount">0</span>
+                            </h6>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-danger" onclick="deleteSelectedProducts()">
+                                    <i class="fas fa-trash me-1"></i>Excluir Selecionados
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 4%;"><input type="checkbox" id="selectAllProducts"
+                                                    onchange="toggleAllProducts()"></th>
+                                            <th style="width: 28%;">Produto</th>
+                                            <th style="width: 12%;">Custo</th>
+                                            <th style="width: 12%;">Venda</th>
+                                            <th style="width: 10%;">Estoque</th>
+                                            <th style="width: 10%;">Lucro/Un</th>
+                                            <th style="width: 12%;">Reposição</th>
+                                            <th style="width: 12%;">Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="produtosTable">
+                                        <!-- Conteúdo carregado via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MOVIMENTAÇÕES -->
+                <div class="tab-pane fade" id="movimentacoes" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0 fw-semibold">
+                                        <i class="fas fa-plus me-2 text-primary"></i>
+                                        Registrar Movimentação
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <form id="movimentacaoForm" onsubmit="return false;">
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold">Produto *</label>
+                                                <select id="movProduto" class="form-select" required>
+                                                    <option value="">Selecione um produto...</option>
+                                                </select>
+                                                <div id="produtoInfo" class="form-text small text-muted mt-1"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label fw-semibold">Tipo *</label>
+                                                <select id="movTipo" class="form-select" required>
+                                                    <option value="entrada"><i
+                                                            class="fas fa-sign-in-alt text-success me-1"></i>Entrada
+                                                    </option>
+                                                    <option value="saida"><i
+                                                            class="fas fa-sign-out-alt text-danger me-1"></i>Saída
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label fw-semibold">Canal *</label>
+                                                <select id="movCanal" class="form-select" required>
+                                                    <option value="online"><i
+                                                            class="fas fa-globe text-info me-1"></i>Online</option>
+                                                    <option value="fisica"><i
+                                                            class="fas fa-store text-primary me-1"></i>Física</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label fw-semibold">Quantidade *</label>
+                                                <input type="number" id="movQuantidade" class="form-control" value="1"
+                                                    min="1" max="999" required>
+                                                <div id="estoqueWarning" class="form-text small text-warning"
+                                                    style="display: none;"></div>
+                                            </div>
+                                            <div class="col-md-2 d-grid">
+                                                <button type="submit" class="btn btn-success h-100">
+                                                    <i class="fas fa-save me-1"></i>Registrar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <div class="mt-3">
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            <strong>Dica:</strong> Para saídas, verifique se há estoque suficiente. O
+                                            sistema bloqueia vendas com estoque insuficiente.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h6 class="mb-0 fw-semibold">
+                                        <i class="fas fa-history me-2"></i>Últimas 5 Movimentações
+                                    </h6>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div id="recentMovements" class="list-group list-group-flush"
+                                        style="max-height: 300px; overflow-y: auto;">
+                                        <!-- Carregado via JS -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h6 class="mb-0 fw-semibold">
+                                <i class="fas fa-history me-2 text-info"></i>
+                                Histórico de Movimentações
+                            </h6>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 14%;">Data</th>
+                                            <th style="width: 25%;">Produto</th>
+                                            <th style="width: 10%;">Tipo</th>
+                                            <th style="width: 8%;">Qtd</th>
+                                            <th style="width: 12%;">Canal</th>
+                                            <th style="width: 16%;">Valor</th>
+                                            <th style="width: 15%;">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="movimentacoesTable">
+                                        <!-- Carregado via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RELATÓRIOS -->
+                <div class="tab-pane fade" id="relatorios" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0 fw-semibold">
+                                        <i class="fas fa-chart-bar me-2 text-primary"></i>
+                                        Resumo por Período
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Data Inicial</label>
+                                            <input type="date" id="relatorioDataInicio" class="form-control">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Data Final</label>
+                                            <input type="date" id="relatorioDataFim" class="form-control">
+                                        </div>
+                                        <div class="col-12">
+                                            <button class="btn btn-primary" onclick="generateRelatorio()">
+                                                <i class="fas fa-chart-bar me-1"></i>Gerar Relatório
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div id="relatorioResultado" class="mt-4"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0 fw-semibold">
+                                        <i class="fas fa-file-export me-2 text-success"></i>
+                                        Exportar Relatórios
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="list-group">
+                                        <button
+                                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                                            onclick="exportRelatorio('csv')">
+                                            <div>
+                                                <i class="fas fa-file-csv text-success me-2"></i>
+                                                <strong>Exportar CSV</strong>
+                                            </div>
+                                            <small class="text-muted">Formato de planilha</small>
+                                        </button>
+                                        <button
+                                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                                            onclick="exportRelatorio('pdf')">
+                                            <div>
+                                                <i class="fas fa-file-pdf text-danger me-2"></i>
+                                                <strong>Exportar PDF</strong>
+                                            </div>
+                                            <small class="text-muted">Formato imprimível</small>
+                                        </button>
+                                        <button
+                                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                                            onclick="exportRelatorio('excel')">
+                                            <div>
+                                                <i class="fas fa-file-excel text-success me-2"></i>
+                                                <strong>Exportar Excel</strong>
+                                            </div>
+                                            <small class="text-muted">Formato avançado</small>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0 fw-semibold">
+                                        <i class="fas fa-chart-pie me-2 text-info"></i>
+                                        Gráfico de Vendas por Mês
+                                    </h6>
+                                </div>
+                                <div class="card-body text-center p-4">
+                                    <div id="vendasChart" style="height: 300px; width: 100%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONFIGURAÇÕES -->
+                <div class="tab-pane fade" id="config" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0 fw-semibold">
+                                        <i class="fas fa-user-cog me-2 text-primary"></i>
+                                        Configurações do Usuário
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Usuário Atual</label>
+                                        <input type="text" class="form-control" value="admin" readonly>
+                                    </div>
+                                    <div class="row g-2">
+                                        <div class="col-md-6">
+                                            <button class="btn btn-outline-primary w-100" onclick="changePassword()">
+                                                <i class="fas fa-key me-1"></i>Mudar Senha
+                                            </button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button class="btn btn-outline-warning w-100" onclick="resetPassword()">
+                                                <i class="fas fa-undo me-1"></i>Resetar
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3 alert alert-info">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        A senha padrão é <code>senha123</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0 fw-semibold">
+                                        <i class="fas fa-database me-2 text-info"></i>
+                                        Armazenamento Local
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row text-center">
+                                        <div class="col-6 border-end">
+                                            <div class="h5 text-primary mb-1" id="dbSize">0</div>
+                                            <small class="text-muted">Tamanho DB</small>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="h5 text-success mb-1" id="recordCount">0</div>
+                                            <small class="text-muted">Registros</small>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <button class="btn btn-outline-danger w-100" onclick="optimizeDatabase()">
+                                            <i class="fas fa-compress me-1"></i>Otimizar DB
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0 fw-semibold">
+                                        <i class="fas fa-download me-2 text-success"></i>
+                                        Backup & Exportação
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="btn-group-vertical w-100" role="group">
+                                        <button class="btn btn-outline-success mb-2" onclick="backupAllData('csv')">
+                                            <i class="fas fa-file-csv me-2"></i>Exportar CSV Completo
+                                        </button>
+                                        <button class="btn btn-outline-primary mb-2" onclick="backupAllData('json')">
+                                            <i class="fas fa-file-code me-2"></i>Exportar JSON
+                                        </button>
+                                        <button class="btn btn-outline-info mb-2" onclick="backupAllData('html')">
+                                            <i class="fas fa-file-alt me-2"></i>Relatório HTML
+                                        </button>
+                                        <div class="mt-2">
+                                            <label for="importFile" class="btn btn-outline-secondary w-100">
+                                                <i class="fas fa-upload me-2"></i>Importar Dados
+                                                <input type="file" id="importFile" accept=".json,.csv"
+                                                    style="display: none;" onchange="importBackup(event)">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0 fw-semibold">
+                                        <i class="fas fa-cog me-2 text-warning"></i>
+                                        Configurações do Sistema
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="autoBackup" checked>
+                                        <label class="form-check-label" for="autoBackup">
+                                            Backup automático semanal
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="lowStockAlert" checked>
+                                        <label class="form-check-label" for="lowStockAlert">
+                                            Alertas de estoque baixo
+                                        </label>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Ponto de alerta de estoque</label>
+                                        <input type="number" class="form-control" id="stockAlertLevel" value="10"
+                                            min="1" max="100">
+                                    </div>
+                                    <button class="btn btn-outline-success w-100" onclick="saveSettings()">
+                                        <i class="fas fa-save me-1"></i>Salvar Configurações
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0 fw-semibold">
+                                        <i class="fas fa-exclamation-triangle me-2 text-danger"></i>
+                                        Limpeza de Dados ⚠️
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-danger">
+                                        <h6 class="alert-heading mb-3">
+                                            <i class="fas fa-exclamation-triangle me-2"></i>Atenção!
+                                        </h6>
+                                        <p class="mb-3">Esta ação irá <strong>apagar permanentemente</strong> todos os
+                                            dados do sistema:</p>
+                                        <ul class="list-unstyled mb-3">
+                                            <li class="mb-1"><i class="fas fa-times-circle text-danger me-2"></i>Todos
+                                                os produtos cadastrados</li>
+                                            <li class="mb-1"><i class="fas fa-times-circle text-danger me-2"></i>Todo o
+                                                histórico de movimentações</li>
+                                            <li class="mb-1"><i
+                                                    class="fas fa-times-circle text-danger me-2"></i>Relatórios e
+                                                estatísticas</li>
+                                            <li class="mb-1"><i
+                                                    class="fas fa-times-circle text-danger me-2"></i>Configurações
+                                                personalizadas</li>
+                                        </ul>
+                                        <div class="alert alert-warning">
+                                            <i class="fas fa-exclamation-circle me-1"></i>
+                                            <strong>IMPORTANTE:</strong> Faça backup antes de continuar!
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex gap-3">
+                                        <button class="btn btn-danger" onclick="clearAllData()">
+                                            <i class="fas fa-trash-alt me-1"></i>Limpar Tudo
+                                        </button>
+                                        <button class="btn btn-outline-secondary" onclick="backupBeforeClear()">
+                                            <i class="fas fa-download me-1"></i>Backup Primeiro
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card border-0">
+                                <div class="card-body text-center text-muted p-4">
+                                    <i class="fas fa-info-circle fa-2x mb-3 opacity-75"></i>
+                                    <h6>Sistema de Controle de Loja v2.0</h6>
+                                    <p class="mb-2">Desenvolvido para GitHub Pages | 100% Offline</p>
+                                    <small>
+                                        Dados armazenados localmente no navegador<br>
+                                        <a href="#" class="text-decoration-none" onclick="showChangelog()">Ver histórico
+                                            de versões</a>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // ========================================
-    // BANCO DE DADOS LOCAL (localStorage)
-    // ========================================
-    
-    class LojaDatabase {
-      constructor() {
-        this.dbName = 'controle_loja_db_v2';
-        this.init();
-      }
-      
-      init() {
-        const defaultData = {
-          version: '2.0',
-          config: {
-            createdAt: new Date().toISOString(),
-            lastBackup: null
-          },
-          produtos: [
-            {
-              id: 'demo1',
-              nome: 'Camiseta Básica',
-              preco_custo: 25.00,
-              preco_venda: 45.00,
-              estoque: 50,
-              createdAt: new Date().toISOString()
-            },
-            {
-              id: 'demo2',
-              nome: 'Calça Jeans',
-              preco_custo: 80.00,
-              preco_venda: 150.00,
-              estoque: 30,
-              createdAt: new Date().toISOString()
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ========================================
+        // INICIALIZAÇÃO E BANCO DE DADOS
+        // ========================================
+
+        // Simples hash para demo (NÃO usar em produção)
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
             }
-          ],
-          movimentacoes: [
-            {
-              id: 'mov1',
-              produtoId: 'demo1',
-              tipo: 'saida',
-              quantidade: 2,
-              canal: 'fisica',
-              data: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2h atrás
-              createdAt: new Date().toISOString()
-            },
-            {
-              id: 'mov2',
-              produtoId: 'demo1',
-              tipo: 'entrada',
-              quantidade: 10,
-              canal: 'online',
-              data: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // ontem
-              createdAt: new Date().toISOString()
-            }
-          ]
-        };
-        
-        const saved = localStorage.getItem(this.dbName);
-        if (!saved) {
-          this.data = defaultData;
-          this.save();
-        } else {
-          try {
-            this.data = JSON.parse(saved);
-            if (this.data.version !== '2.0') {
-              // Migração necessária
-              this.data = { ...defaultData, ...this.data };
-              this.save();
-            }
-          } catch (e) {
-            console.error('Erro ao carregar banco:', e);
-            this.data = defaultData;
-            this.save();
-          }
+            return Math.abs(hash).toString(36);
         }
-      }
-      
-      save() {
-        try {
-          localStorage.setItem(this.dbName, JSON.stringify(this.data));
-          return true;
-        } catch (e) {
-          console.error('Erro ao salvar:', e);
-          return false;
-        }
-      }
-      
-      // PRODUTOS
-      getProdutos() {
-        return this.data.produtos || [];
-      }
-      
-      addProduto(produto) {
-        const novoId = 'prod_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        const novoProduto = {
-          id: novoId,
-          ...produto,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        };
-        
-        this.data.produtos.unshift(novoProduto);
-        return this.save() ? novoProduto : null;
-      }
-      
-      updateProduto(id, updates) {
-        const index = this.data.produtos.findIndex(p => p.id === id);
-        if (index === -1) return false;
-        
-        this.data.produtos[index] = {
-          ...this.data.produtos[index],
-          ...updates,
-          updatedAt: new Date().toISOString()
-        };
-        
-        return this.save();
-      }
-      
-      deleteProduto(id) {
-        // Remove produto
-        this.data.produtos = this.data.produtos.filter(p => p.id !== id);
-        
-        // Remove movimentações relacionadas
-        this.data.movimentacoes = this.data.movimentacoes.filter(m => m.produtoId !== id);
-        
-        return this.save();
-      }
-      
-      // MOVIMENTAÇÕES
-      getMovimentacoes(filtros = {}) {
-        let movs = [...(this.data.movimentacoes || [])];
-        
-        // Filtros
-        if (filtros.canal && filtros.canal !== 'todos') {
-          movs = movs.filter(m => m.canal === filtros.canal);
-        }
-        
-        if (filtros.periodo) {
-          const agora = new Date();
-          let dataInicio;
-          
-          switch (filtros.periodo) {
-            case 'hoje':
-              dataInicio = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
-              break;
-            case 'semana':
-              const diaSemana = agora.getDay();
-              dataInicio = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate() - diaSemana);
-              break;
-            case 'mes':
-              dataInicio = new Date(agora.getFullYear(), agora.getMonth(), 1);
-              break;
-          }
-          
-          movs = movs.filter(m => new Date(m.data) >= dataInicio);
-        }
-        
-        // Ordenar por data (mais recente primeiro)
-        movs.sort((a, b) => new Date(b.data) - new Date(a.data));
-        
-        return movs;
-      }
-      
-      addMovimentacao(movimentacao) {
-        // Validar estoque para saídas
-        if (movimentacao.tipo === 'saida') {
-          const produto = this.data.produtos.find(p => p.id === movimentacao.produtoId);
-          if (!produto || produto.estoque < movimentacao.quantidade) {
-            return { success: false, error: `Estoque insuficiente! Disponível: ${produto?.estoque || 0}` };
-          }
-        }
-        
-        const novoId = 'mov_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        const novaMov = {
-          id: novoId,
-          ...movimentacao,
-          data: movimentacao.data || new Date().toISOString(),
-          createdAt: new Date().toISOString()
-        };
-        
-        this.data.movimentacoes.unshift(novaMov);
-        
-        // Atualizar estoque
-        const produtoIndex = this.data.produtos.findIndex(p => p.id === novaMov.produtoId);
-        if (produtoIndex !== -1) {
-          const delta = novaMov.tipo === 'entrada' ? +novaMov.quantidade : -novaMov.quantidade;
-          this.data.produtos[produtoIndex].estoque += delta;
-          this.data.produtos[produtoIndex].updatedAt = new Date().toISOString();
-        }
-        
-        return this.save() ? novaMov : null;
-      }
-      
-      // ESTATÍSTICAS
-      getEstatisticas() {
-        const produtos = this.getProdutos();
-        const movimentacoes = this.getMovimentacoes();
-        
-        const vendasHoje = movimentacoes.filter(m => 
-          m.tipo === 'saida' && 
-          new Date(m.data).toDateString() === new Date().toDateString()
-        );
-        
-        const totalVendas = movimentacoes.filter(m => m.tipo === 'saida').length;
-        const totalLucro = movimentacoes
-          .filter(m => m.tipo === 'saida')
-          .reduce((sum, m) => {
-            const produto = produtos.find(p => p.id === m.produtoId);
-            return sum + (produto ? (produto.preco_venda - produto.preco_custo) * m.quantidade : 0);
-          }, 0);
-        
-        const totalEstoque = produtos.reduce((sum, p) => sum + p.estoque, 0);
-        
-        return {
-          totalVendasHoje: vendasHoje.length,
-          totalVendas,
-          totalLucro,
-          totalProdutos: produtos.length,
-          totalEstoque
-        };
-      }
-      
-      // BACKUP
-      exportData(formato = 'csv') {
-        const data = {
-          config: this.data.config,
-          produtos: this.data.produtos,
-          movimentacoes: this.data.movimentacoes,
-          exportedAt: new Date().toISOString()
-        };
-        
-        if (formato === 'csv') {
-          return this.toCSV(data);
-        }
-        return JSON.stringify(data, null, 2);
-      }
-      
-      toCSV(data) {
-        let csv = 'TIPO,DADOS\n';
-        
-        // Produtos
-        csv += 'PRODUTO,' + data.produtos.map(p => 
-          [p.nome, p.preco_custo, p.preco_venda, p.estoque, p.createdAt]
-            .map(v => `"${v}"`).join('|')
-        ).join(';') + '\n';
-        
-        // Movimentações
-        csv += 'MOVIMENTACAO,' + data.movimentacoes.map(m => 
-          [m.produtoId, m.tipo, m.quantidade, m.data, m.canal, m.createdAt]
-            .map(v => `"${v}"`).join('|')
-        ).join(';') + '\n';
-        
-        return csv;
-      }
-      
-      importData(content, formato = 'json') {
-        try {
-          let imported;
-          if (formato === 'csv') {
-            imported = this.parseCSV(content);
-          } else {
-            imported = JSON.parse(content);
-          }
-          
-          if (!imported.produtos || !imported.movimentacoes) {
-            return { success: false, error: 'Formato inválido' };
-          }
-          
-          // Merge com dados existentes
-          this.data.produtos.push(...imported.produtos);
-          this.data.movimentacoes.push(...imported.movimentacoes);
-          
-          // Remover duplicatas
-          this.data.produtos = this.data.produtos.filter((p, i, arr) => 
-            arr.findIndex(p2 => p2.id === p.id) === i
-          );
-          this.data.movimentacoes = this.data.movimentacoes.filter((m, i, arr) => 
-            arr.findIndex(m2 => m2.id === m.id) === i
-          );
-          
-          this.data.config.lastImport = new Date().toISOString();
-          return { success: this.save(), count: imported.produtos.length + imported.movimentacoes.length };
-        } catch (e) {
-          return { success: false, error: 'Erro ao importar: ' + e.message };
-        }
-      }
-      
-      parseCSV(csv) {
-        const lines = csv.split('\n');
-        const data = { produtos: [], movimentacoes: [] };
-        
-        lines.forEach(line => {
-          if (line.startsWith('PRODUTO,')) {
-            const produtos = line.split(',')[1];
-            if (produtos) {
-              produtos.split(';').forEach(prod => {
-                const [nome, custo, venda, estoque, createdAt] = prod.split('|').map(v => v.replace(/"/g, ''));
-                if (nome) {
-                  data.produtos.push({
-                    id: 'imp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-                    nome,
-                    preco_custo: parseFloat(custo),
-                    preco_venda: parseFloat(venda),
-                    estoque: parseInt(estoque),
-                    createdAt: createdAt || new Date().toISOString()
-                  });
+
+        // Banco de dados local
+        const LojaDB = {
+            data: null,
+            init: function () {
+                const defaultData = {
+                    version: '2.0.1',
+                    config: {
+                        createdAt: new Date().toISOString(),
+                        lastBackup: null,
+                        settings: {
+                            autoBackup: true,
+                            lowStockAlert: true,
+                            stockAlertLevel: 10
+                        }
+                    },
+                    produtos: [
+                        {
+                            id: 'p001',
+                            nome: 'Camiseta Básica Branca',
+                            categoria: 'roupas',
+                            preco_custo: 25.00,
+                            preco_venda: 45.00,
+                            estoque: 47,
+                            min_estoque: 5,
+                            barcode: '7891234567890',
+                            createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+                            updatedAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'p002',
+                            nome: 'Calça Jeans Slim',
+                            categoria: 'roupas',
+                            preco_custo: 80.00,
+                            preco_venda: 150.00,
+                            estoque: 28,
+                            min_estoque: 3,
+                            barcode: '7891234567891',
+                            createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+                            updatedAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'p003',
+                            nome: 'Cinto Couro Preto',
+                            categoria: 'acessorios',
+                            preco_custo: 35.00,
+                            preco_venda: 75.00,
+                            estoque: 12,
+                            min_estoque: 2,
+                            barcode: '7891234567892',
+                            createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+                            updatedAt: new Date().toISOString()
+                        }
+                    ],
+                    movimentacoes: [
+                        {
+                            id: 'm001',
+                            produtoId: 'p001',
+                            tipo: 'saida',
+                            quantidade: 3,
+                            canal: 'fisica',
+                            data: new Date().toISOString(),
+                            valor: 135.00,
+                            lucro: 60.00,
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'm002',
+                            produtoId: 'p002',
+                            tipo: 'entrada',
+                            quantidade: 10,
+                            canal: 'online',
+                            data: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+                            valor: 800.00,
+                            lucro: 0,
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'm003',
+                            produtoId: 'p001',
+                            tipo: 'saida',
+                            quantidade: 2,
+                            canal: 'online',
+                            data: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+                            valor: 90.00,
+                            lucro: 40.00,
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'm004',
+                            produtoId: 'p003',
+                            tipo: 'saida',
+                            quantidade: 1,
+                            canal: 'fisica',
+                            data: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+                            valor: 75.00,
+                            lucro: 40.00,
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'm005',
+                            produtoId: 'p002',
+                            tipo: 'saida',
+                            quantidade: 1,
+                            canal: 'online',
+                            data: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
+                            valor: 150.00,
+                            lucro: 70.00,
+                            createdAt: new Date().toISOString()
+                        }
+                    ]
+                };
+
+                const saved = localStorage.getItem('controle_loja_v2');
+                if (saved) {
+                    try {
+                        this.data = { ...defaultData, ...JSON.parse(saved) };
+                    } catch (e) {
+                        console.warn('Dados corrompidos, usando padrão');
+                        this.data = defaultData;
+                    }
+                } else {
+                    this.data = defaultData;
                 }
-              });
-            }
-          } else if (line.startsWith('MOVIMENTACAO,')) {
-            const movs = line.split(',')[1];
-            if (movs) {
-              movs.split(';').forEach(mov => {
-                const [produtoId, tipo, quantidade, data, canal, createdAt] = mov.split('|').map(v => v.replace(/"/g, ''));
-                if (produtoId && tipo) {
-                  data.movimentacoes.push({
-                    id: 'imp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-                    produtoId,
-                    tipo,
-                    quantidade: parseInt(quantidade),
-                    data: data || new Date().toISOString(),
-                    canal,
-                    createdAt: createdAt || new Date().toISOString()
-                  });
+
+                this.save();
+                console.log('✅ Banco de dados inicializado com', this.data.produtos.length, 'produtos');
+            },
+
+            save: function () {
+                try {
+                    localStorage.setItem('controle_loja_v2', JSON.stringify(this.data));
+                    return true;
+                } catch (e) {
+                    console.error('Erro ao salvar dados:', e);
+                    return false;
                 }
-              });
+            },
+
+            getProdutos: function () {
+                return this.data.produtos || [];
+            },
+
+            getMovimentacoes: function (filtros = {}) {
+                let movs = [...(this.data.movimentacoes || [])];
+
+                if (filtros.canal && filtros.canal !== 'todos') {
+                    movs = movs.filter(m => m.canal === filtros.canal);
+                }
+
+                if (filtros.status && filtros.status !== 'todos') {
+                    movs = movs.filter(m => m.tipo === filtros.status);
+                }
+
+                if (filtros.periodo) {
+                    const hoje = new Date();
+                    let inicio;
+
+                    switch (filtros.periodo) {
+                        case 'hoje':
+                            inicio = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+                            break;
+                        case 'semana':
+                            const diaSemana = hoje.getDay();
+                            inicio = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate() - diaSemana);
+                            break;
+                        case 'mes':
+                            inicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+                            break;
+                        case 'ano':
+                            inicio = new Date(hoje.getFullYear(), 0, 1);
+                            break;
+                    }
+
+                    movs = movs.filter(m => new Date(m.data) >= inicio);
+                }
+
+                // Ordenar por data descendente
+                movs.sort((a, b) => new Date(b.data) - new Date(a.data));
+
+                return movs;
+            },
+
+            addProduto: function (produto) {
+                const id = 'p' + Date.now().toString(36) + Math.random().toString(36).substr(2);
+                const novoProduto = {
+                    id,
+                    ...produto,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+
+                this.data.produtos.unshift(novoProduto);
+                this.save();
+                return novoProduto;
+            },
+
+            updateProduto: function (id, updates) {
+                const index = this.data.produtos.findIndex(p => p.id === id);
+                if (index === -1) return false;
+
+                this.data.produtos[index] = {
+                    ...this.data.produtos[index],
+                    ...updates,
+                    updatedAt: new Date().toISOString()
+                };
+
+                this.save();
+                return true;
+            },
+
+            deleteProduto: function (id) {
+                this.data.produtos = this.data.produtos.filter(p => p.id !== id);
+                this.data.movimentacoes = this.data.movimentacoes.filter(m => m.produtoId !== id);
+                this.save();
+                return true;
+            },
+
+            addMovimentacao: function (mov) {
+                const produto = this.data.produtos.find(p => p.id === mov.produtoId);
+                if (!produto) return { success: false, error: 'Produto não encontrado' };
+
+                if (mov.tipo === 'saida' && produto.estoque < mov.quantidade) {
+                    return { success: false, error: `Estoque insuficiente. Disponível: ${produto.estoque}` };
+                }
+
+                const id = 'm' + Date.now().toString(36) + Math.random().toString(36).substr(2);
+                const novaMov = {
+                    id,
+                    ...mov,
+                    data: mov.data || new Date().toISOString(),
+                    createdAt: new Date().toISOString(),
+                    valor: mov.tipo === 'saida' ? produto.preco_venda * mov.quantidade : 0,
+                    lucro: mov.tipo === 'saida' ? (produto.preco_venda - produto.preco_custo) * mov.quantidade : 0
+                };
+
+                this.data.movimentacoes.unshift(novaMov);
+
+                // Atualizar estoque
+                if (mov.tipo === 'saida') {
+                    produto.estoque -= mov.quantidade;
+                } else {
+                    produto.estoque += mov.quantidade;
+                }
+                produto.updatedAt = new Date().toISOString();
+
+                this.save();
+                return { success: true, movimentacao: novaMov };
+            },
+
+            getStats: function () {
+                const produtos = this.getProdutos();
+                const movimentacoes = this.getMovimentacoes({ periodo: 'hoje' });
+
+                const vendasHoje = movimentacoes.filter(m => m.tipo === 'saida');
+                const totalVendasHoje = vendasHoje.length;
+                const totalLucroHoje = vendasHoje.reduce((sum, m) => sum + m.lucro, 0);
+                const totalProdutos = produtos.length;
+                const totalEstoque = produtos.reduce((sum, p) => sum + p.estoque, 0);
+                const vendasFisicas = movimentacoes.filter(m => m.canal === 'fisica' && m.tipo === 'saida').length;
+                const vendasOnline = movimentacoes.filter(m => m.canal === 'online' && m.tipo === 'saida').length;
+                const totalReceita = movimentacoes.reduce((sum, m) => sum + m.valor, 0);
+
+                return {
+                    totalVendasHoje,
+                    totalLucroHoje,
+                    totalProdutos,
+                    totalEstoque,
+                    vendasFisicas,
+                    vendasOnline,
+                    totalReceita
+                };
+            },
+
+            exportCSV: function () {
+                const produtos = this.getProdutos();
+                const movimentacoes = this.getMovimentacoes();
+
+                let csv = 'TIPO,DADOS\n';
+
+                // Produtos
+                csv += 'PRODUTO,' + produtos.map(p =>
+                    [p.nome, p.preco_custo, p.preco_venda, p.estoque, p.categoria || '', p.barcode || '']
+                        .map(v => `"${String(v).replace(/"/g, '""')}"`).join('|')
+                ).join(';') + '\n';
+
+                // Movimentações
+                csv += 'MOVIMENTACAO,' + movimentacoes.map(m => {
+                    const produto = produtos.find(p => p.id === m.produtoId);
+                    return [
+                        m.produtoId,
+                        m.tipo,
+                        m.quantidade,
+                        m.data,
+                        m.canal,
+                        m.valor,
+                        m.lucro,
+                        produto ? produto.nome : ''
+                    ].map(v => `"${String(v).replace(/"/g, '""')}"`).join('|');
+                }).join(';') + '\n';
+
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `relatorio-vendas-${new Date().toISOString().split('T')[0]}.csv`;
+                link.click();
             }
-          }
-        });
-        
-        return data;
-      }
-      
-      clearAll() {
-        localStorage.removeItem(this.dbName);
-        this.init();
-        return true;
-      }
-    }
+        };
 
-    // ========================================
-    // APLICAÇÃO PRINCIPAL
-    // ========================================
-    
-    const db = new LojaDatabase();
-    let currentUser = null;
+        // ========================================
+        // INICIALIZAÇÃO DA APLICAÇÃO
+        // ========================================
 
-    // Inicialização
-    document.addEventListener('DOMContentLoaded', function() {
-      // Verificar autenticação
-      checkAuth();
-      
-      // Configurar event listeners
-      setupEventListeners();
-      
-      // Carregar dados iniciais
-      if (document.getElementById('appMain').style.display !== 'none') {
-        loadAllData();
-      }
-    });
+        document.addEventListener('DOMContentLoaded', function () {
+            // Inicializar banco
+            LojaDB.init();
 
-    function checkAuth() {
-      const savedSession = localStorage.getItem('controle-loja-session');
-      if (!savedSession) {
-        // Não autenticado - redirecionar para login
-        window.location.href = 'index.html';
-        return;
-      }
-      
-      try {
-        const session = JSON.parse(savedSession);
-        if (session.expires > Date.now()) {
-          currentUser = session;
-          document.getElementById('userName').textContent = session.username;
-          document.getElementById('loadingScreen').style.display = 'none';
-          document.getElementById('appMain').style.display = 'block';
-          
-          // Auto-load dashboard
-          setTimeout(() => {
-            loadDashboard();
-          }, 500);
-        } else {
-          localStorage.removeItem('controle-loja-session');
-          window.location.href = 'index.html';
-        }
-      } catch (e) {
-        localStorage.removeItem('controle-loja-session');
-        window.location.href = 'index.html';
-      }
-    }
-
-    function setupEventListeners() {
-      // Filtro de período
-      document.getElementById('filterPeriodo').addEventListener('change', function() {
-        const value = this.value;
-        const dataInput = document.getElementById('filterData');
-        
-        if (value && value !== '') {
-          dataInput.style.display = 'block';
-          dataInput.value = new Date().toISOString().split('T')[0]; // Data atual
-        } else {
-          dataInput.style.display = 'none';
-        }
-      });
-
-      // Enter em inputs numéricos
-      document.querySelectorAll('input[type="number"]').forEach(input => {
-        input.addEventListener('keypress', function(e) {
-          if (e.key === 'Enter') {
-            const form = this.closest('.card-body');
-            if (form.querySelector('#movProduto') && this.id === 'movQuantidade') {
-              saveMovimentacao();
-            } else if (form.querySelector('#produtoNome')) {
-              saveProduto();
+            // Verificar autenticação
+            const session = localStorage.getItem('loja_session');
+            if (!session) {
+                // Redirecionar para login
+                window.location.href = 'index.html';
+                return;
             }
-          }
+
+            try {
+                const sessionData = JSON.parse(session);
+                if (sessionData.expires > Date.now()) {
+                    // Autenticado - carregar app
+                    document.getElementById('loadingOverlay').style.display = 'flex';
+                    setTimeout(() => {
+                        initializeApp();
+                    }, 1500);
+                } else {
+                    localStorage.removeItem('loja_session');
+                    window.location.href = 'index.html';
+                }
+            } catch (e) {
+                localStorage.removeItem('loja_session');
+                window.location.href = 'index.html';
+            }
         });
-      });
-    }
 
-    function logout() {
-      if (confirm('Deseja realmente sair do sistema?')) {
-        localStorage.removeItem('controle-loja-session');
-        localStorage.removeItem('controle-loja-user');
-        window.location.href = 'index.html';
-      }
-    }
+        function initializeApp() {
+            // Configurar interface
+            document.getElementById('loadingOverlay').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
 
-    // ========================================
-    // CARREGAMENTO DE DADOS
-    // ========================================
+            // Carregar dados
+            loadAllData();
 
-    function loadAllData() {
-      loadDashboard();
-      loadProdutos();
-      updateMovimentoSelect();
-      updateStats();
-    }
+            // Configurar event listeners
+            setupEventListeners();
 
-    function loadProdutos() {
-      const produtos = db.getProdutos();
-      const tbody = document.getElementById('produtosTable');
-      
-      if (produtos.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="6" class="text-center py-4">
-              <div class="text-muted">
-                <i class="fas fa-box-open fa-3x mb-3 d-block"></i>
-                <p>Nenhum produto cadastrado</p>
-                <small>Use o formulário acima para adicionar o primeiro produto!</small>
+            // Atualizar UI
+            updateUserDisplay();
+            setupTabNavigation();
+
+            console.log('✅ App inicializado com sucesso');
+        }
+
+        function setupEventListeners() {
+            // Filtros do dashboard
+            document.getElementById('filterPeriodo').addEventListener('change', function () {
+                const dataInput = document.getElementById('filterData');
+                if (this.value) {
+                    dataInput.style.display = 'block';
+                    dataInput.value = new Date().toISOString().split('T')[0];
+                } else {
+                    dataInput.style.display = 'none';
+                }
+            });
+
+            // Formulário de produto
+            document.getElementById('produtoForm').addEventListener('input', function () {
+                calculateProductProfit();
+            });
+
+            document.getElementById('produtoForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                saveProduct();
+            });
+
+            // Formulário de movimentação
+            document.getElementById('movimentacaoForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                saveMovement();
+            });
+
+            document.getElementById('movProduto').addEventListener('change', function () {
+                updateStockWarning();
+            });
+
+            document.getElementById('movTipo').addEventListener('change', function () {
+                updateStockWarning();
+            });
+
+            document.getElementById('movQuantidade').addEventListener('input', function () {
+                updateStockWarning();
+            });
+
+            // Seleção de produtos
+            document.getElementById('selectAllProducts').addEventListener('change', function () {
+                document.querySelectorAll('#produtosTable input[type="checkbox"]').forEach(cb => {
+                    cb.checked = this.checked;
+                });
+            });
+        }
+
+        // ========================================
+        // FUNÇÕES DO DASHBOARD
+        // ========================================
+
+        function loadDashboard() {
+            showLoading(true);
+
+            setTimeout(() => {
+                const canal = document.getElementById('filterCanal').value;
+                const periodo = document.getElementById('filterPeriodo').value;
+                const data = document.getElementById('filterData').value;
+                const status = document.getElementById('filterStatus').value;
+
+                const filtros = { canal, status };
+                if (periodo && data) {
+                    filtros.periodo = periodo;
+                    filtros.data = data;
+                }
+
+                const movimentacoes = LojaDB.getMovimentacoes(filtros);
+                const produtos = LojaDB.getProdutos();
+
+                // Atualizar estatísticas
+                const stats = LojaDB.getStats();
+                updateDashboardStats(stats);
+
+                // Preencher tabela
+                populateDashboardTable(movimentacoes, produtos);
+
+                // Atualizar badges
+                document.getElementById('movCountBadge').textContent = movimentacoes.length;
+
+                showLoading(false);
+            }, 800);
+        }
+
+        function updateDashboardStats(stats) {
+            document.getElementById('totalVendasHoje').textContent = stats.totalVendasHoje;
+            document.getElementById('totalLucro').textContent = formatCurrency(stats.totalLucroHoje);
+            document.getElementById('totalProdutos').textContent = stats.totalProdutos;
+            document.getElementById('totalEstoque').textContent = stats.totalEstoque;
+
+            document.getElementById('vendasFisicas').textContent = stats.vendasFisicas;
+            document.getElementById('vendasOnline').textContent = stats.vendasOnline;
+            document.getElementById('totalReceita').textContent = formatCurrency(stats.totalReceita);
+        }
+
+        function populateDashboardTable(movimentacoes, produtos) {
+            const tbody = document.getElementById('dashboardTableBody');
+
+            if (movimentacoes.length === 0) {
+                tbody.innerHTML = `
+          <tr class="table-light">
+            <td colspan="7" class="text-center py-5">
+              <div class="empty-state">
+                <i class="fas fa-inbox fa-3x mb-3"></i>
+                <h5>Nenhuma movimentação encontrada</h5>
+                <p class="mb-3">Ajuste os filtros acima ou registre sua primeira venda!</p>
+                <button class="btn btn-primary btn-sm" onclick="loadMovimentacoesTab()">
+                  <i class="fas fa-plus me-1"></i>Registrar Venda
+                </button>
               </div>
             </td>
           </tr>
         `;
-        return;
-      }
-      
-      tbody.innerHTML = produtos.map(produto => {
-        const lucroUnitario = produto.preco_venda - produto.preco_custo;
-        const badgeClass = produto.estoque <= 5 ? 'low-stock badge-warning' : 'badge-success';
-        
-        return `
+                updateTableFooter(0, 0, 0);
+                return;
+            }
+
+            let totalQtd = 0, totalValor = 0, totalLucro = 0;
+
+            const rows = movimentacoes.slice(0, 50).map(mov => {
+                const produto = produtos.find(p => p.id === mov.produtoId);
+                if (!produto) return null;
+
+                const dataFormatada = new Date(mov.data).toLocaleString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                const tipoIcon = mov.tipo === 'saida' ?
+                    '<i class="fas fa-shopping-cart text-danger"></i>' :
+                    '<i class="fas fa-truck text-success"></i>';
+
+                const canalIcon = mov.canal === 'online' ?
+                    '<i class="fas fa-globe text-info"></i>' :
+                    '<i class="fas fa-store text-primary"></i>';
+
+                totalQtd += mov.quantidade;
+                totalValor += mov.valor;
+                totalLucro += mov.lucro;
+
+                return `
+          <tr>
+            <td><small class="text-muted">${dataFormatada}</small></td>
+            <td>
+              <div>
+                <div class="fw-semibold">${escapeHtml(produto.nome)}</div>
+                <small class="text-muted">Cód: ${mov.produtoId.slice(-6)}</small>
+              </div>
+            </td>
+            <td>${tipoIcon} ${mov.tipo === 'saida' ? 'Venda' : 'Compra'}</td>
+            <td class="fw-semibold">${mov.quantidade}</td>
+            <td>${canalIcon} ${mov.canal === 'online' ? 'Online' : 'Física'}</td>
+            <td class="fw-semibold text-primary">${formatCurrency(mov.valor)}</td>
+            <td class="fw-semibold text-success">${formatCurrency(mov.lucro)}</td>
+          </tr>
+        `;
+            }).filter(row => row !== null);
+
+            tbody.innerHTML = rows.join('');
+            updateTableFooter(totalQtd, totalValor, totalLucro);
+
+            if (movimentacoes.length > 50) {
+                const footer = document.querySelector('tfoot');
+                footer.innerHTML += `
+          <tr class="table-info">
+            <td colspan="7" class="text-center py-2 small">
+              <i class="fas fa-ellipsis-h me-1"></i>
+              Mostrando ${Math.min(50, movimentacoes.length)} de ${movimentacoes.length} registros
+              <button class="btn btn-link btn-sm p-0 ms-2 text-decoration-none" onclick="showAllRecords()">
+                Ver todos
+              </button>
+            </td>
+          </tr>
+        `;
+            }
+        }
+
+        function updateTableFooter(qtd, valor, lucro) {
+            document.getElementById('totalQuantidade').textContent = qtd;
+            document.getElementById('totalValor').textContent = formatCurrency(valor);
+            document.getElementById('totalLucroFooter').textContent = formatCurrency(lucro);
+        }
+
+        function showLoading(show = true) {
+            const spinner = document.querySelector('.spinner-border');
+            if (show && spinner) {
+                spinner.style.display
+            }
+
+        }
+
+        function showAllRecords() {
+            // Função para mostrar todos os registros (sem limite)
+            const todasMovs = LojaDB.getMovimentacoes({
+                canal: document.getElementById('filterCanal').value,
+                status: document.getElementById('filterStatus').value,
+                periodo: document.getElementById('filterPeriodo').value,
+                data: document.getElementById('filterData').value
+            });
+
+            const produtos = LojaDB.getProdutos();
+            populateDashboardTable(todasMovs, produtos);
+
+            showAlert('info', `Mostrando todos os ${todasMovs.length} registros`);
+        }
+
+        // ========================================
+        // FUNÇÕES DE PRODUTOS
+        // ========================================
+
+        function loadProducts() {
+            const produtos = LojaDB.getProdutos();
+            const tbody = document.getElementById('produtosTable');
+            const countBadge = document.getElementById('produtosCount');
+
+            countBadge.textContent = produtos.length;
+
+            if (produtos.length === 0) {
+                tbody.innerHTML = `
+          <tr class="table-light">
+            <td colspan="8" class="text-center py-5">
+              <div class="empty-state">
+                <i class="fas fa-box-open fa-3x mb-3 text-muted"></i>
+                <h5>Nenhum produto cadastrado</h5>
+                <p class="text-muted mb-3">Comece adicionando seu primeiro produto usando o formulário acima</p>
+                <button class="btn btn-primary" onclick="scrollToProductForm()">
+                  <i class="fas fa-plus me-2"></i>Adicionar Primeiro Produto
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+                return;
+            }
+
+            tbody.innerHTML = produtos.map((produto, index) => {
+                const lucroUnit = produto.preco_venda - produto.preco_custo;
+                const badgeClass = produto.estoque <= (produto.min_estoque || 5) ? 'low-stock badge-warning' : 'badge-success';
+                const isLowStock = produto.estoque <= (produto.min_estoque || 5);
+
+                return `
           <tr>
             <td>
-              <strong>${escapeHtml(produto.nome)}</strong>
-              <br><small class="text-muted">${new Date(produto.updatedAt).toLocaleDateString('pt-BR')}</small>
+              <input type="checkbox" class="product-checkbox" value="${produto.id}" onchange="updateProductSelection()">
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="me-3">
+                  <div class="avatar-sm rounded-circle bg-light d-flex align-items-center justify-content-center">
+                    <i class="fas fa-${getProductIcon(produto.categoria || 'geral')} text-primary" style="font-size: 1rem;"></i>
+                  </div>
+                </div>
+                <div>
+                  <div class="fw-semibold">${escapeHtml(produto.nome)}</div>
+                  <small class="text-muted">
+                    ${produto.categoria ? `<i class="fas fa-tag me-1"></i>${escapeHtml(produto.categoria)}` : ''}
+                    ${produto.barcode ? `| ${produto.barcode}` : ''}
+                  </small>
+                </div>
+              </div>
             </td>
             <td class="text-success fw-bold">R$ ${produto.preco_custo.toFixed(2)}</td>
             <td class="text-primary fw-bold">R$ ${produto.preco_venda.toFixed(2)}</td>
             <td>
               <span class="${badgeClass}">${produto.estoque}</span>
+              ${isLowStock ? '<i class="fas fa-exclamation-triangle text-warning ms-1" title="Estoque baixo"></i>' : ''}
             </td>
-            <td class="text-success fw-bold">R$ ${lucroUnitario.toFixed(2)}</td>
+            <td class="text-success fw-bold">R$ ${lucroUnit.toFixed(2)}</td>
             <td>
-              <button class="btn btn-sm btn-outline-primary me-1" onclick="editProduto('${produto.id}')" title="Editar">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-danger" onclick="deleteProduto('${produto.id}')" title="Excluir">
-                <i class="fas fa-trash"></i>
-              </button>
+              <span class="badge bg-secondary">${produto.min_estoque || 5}</span>
+            </td>
+            <td>
+              <div class="btn-group btn-group-sm" role="group">
+                <button class="btn btn-outline-primary" onclick="editProduct('${produto.id}')" title="Editar">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-outline-info" onclick="duplicateProduct('${produto.id}')" title="Duplicar">
+                  <i class="fas fa-copy"></i>
+                </button>
+                <button class="btn btn-outline-danger" onclick="deleteProduct('${produto.id}')" title="Excluir">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
             </td>
           </tr>
         `;
-      }).join('');
-    }
+            }).join('');
 
-    function loadDashboard() {
-      const canal = document.getElementById('filterCanal').value;
-      const periodo = document.getElementById('filterPeriodo').value;
-      const data = document.getElementById('filterData').value;
-      
-      const filtros = { canal };
-      if (periodo && data) {
-        filtros.periodo = periodo;
-      }
-      
-      const movimentacoes = db.getMovimentacoes(filtros);
-      const produtos = db.getProdutos();
-      const tbody = document.getElementById('dashboardTable');
-      
-      if (movimentacoes.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="7" class="text-center py-5">
-              <div class="text-muted">
-                <i class="fas fa-chart-line fa-3x mb-3 d-block opacity-50"></i>
-                <h5>Nenhuma movimentação encontrada</h5>
-                <p class="mb-0">Tente ajustar os filtros ou registre a primeira venda!</p>
-              </div>
-            </td>
-          </tr>
+            updateProductSelection();
+        }
+
+        function scrollToProductForm() {
+            document.getElementById('produtoForm').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+            document.getElementById('produtoNome').focus();
+        }
+
+        function calculateProductProfit() {
+            const custo = parseFloat(document.getElementById('produtoCusto').value) || 0;
+            const venda = parseFloat(document.getElementById('produtoVenda').value) || 0;
+            const lucroDiv = document.getElementById('lucroCalculado');
+
+            if (custo > 0 && venda > 0) {
+                const lucro = venda - custo;
+                const margem = ((lucro / venda) * 100).toFixed(1);
+
+                lucroDiv.style.display = 'block';
+                lucroDiv.innerHTML = `
+          <i class="fas fa-calculator me-1"></i>
+          Lucro: <strong>R$ ${lucro.toFixed(2)}</strong> 
+          (<span class="${lucro > 0 ? 'text-success' : 'text-danger'}">${margem}%</span> margem)
         `;
-        return;
-      }
-      
-      tbody.innerHTML = movimentacoes.slice(0, 25).map(mov => {
-        const produto = produtos.find(p => p.id === mov.produtoId);
-        if (!produto) return '';
-        
-        const dataFormatada = new Date(mov.data).toLocaleString('pt-BR', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-        
-        const valor = mov.tipo === 'saida' ? 
-          `R$ ${(produto.preco_venda * mov.quantidade).toFixed(2)}` : 
-          '<span class="text-muted">-</span>';
-        
-        const lucro = mov.tipo === 'saida' ? 
-          `R$ ${((produto.preco_venda - produto.preco_custo) * mov.quantidade).toFixed(2)}` : 
-          '<span class="text-muted">-</span>';
-        
-        const tipoClass = mov.tipo === 'saida' ? 'text-danger' : 'text-success';
-        const canalIcon = mov.canal === 'online' ? '🛒' : '🏪';
-        
-        return `
-          <tr>
-            <td><small class="text-muted">${dataFormatada}</small></td>
-            <td>
-              <div>
-                <strong>${escapeHtml(produto.nome)}</strong>
-                <br><small class="text-muted">ID: ${mov.produtoId.slice(-6)}</small>
-              </div>
-            </td>
-            <td><span class="${tipoClass} fw-bold">${mov.tipo === 'saida' ? 'Saída' : 'Entrada'}</span></td>
-            <td class="fw-bold">${mov.quantidade}</td>
-            <td><span class="me-1">${canalIcon}</span>${mov.canal === 'online' ? 'Online' : 'Física'}</td>
-            <td class="fw-bold text-primary">${valor}</td>
-            <td class="fw-bold text-success">${lucro}</td>
-          </tr>
-        `;
-      }).join('');
-      
-      // Mostrar contador se há mais registros
-      if (movimentacoes.length > 25) {
-        const footer = document.querySelector('#dashboardTable').parentElement;
-        footer.innerHTML += `
-          <div class="p-3 bg-light border-top text-center">
-            <small class="text-muted">
-              Mostrando ${Math.min(25, movimentacoes.length)} de ${movimentacoes.length} movimentações
-              <button class="btn btn-link btn-sm p-0 ms-2" onclick="loadAllMovimentacoes()">Ver todas</button>
-            </small>
+            } else {
+                lucroDiv.style.display = 'none';
+            }
+        }
+
+        function saveProduct() {
+            const nome = document.getElementById('produtoNome').value.trim();
+            const custo = parseFloat(document.getElementById('produtoCusto').value);
+            const venda = parseFloat(document.getElementById('produtoVenda').value);
+            const estoque = parseInt(document.getElementById('produtoEstoque').value) || 0;
+            const categoria = document.getElementById('produtoCategoria').value;
+            const minEstoque = parseInt(document.getElementById('produtoMinEstoque').value) || 5;
+            const barcode = document.getElementById('produtoBarcode').value.trim();
+
+            // Validações
+            if (!nome || custo === undefined || venda === undefined || custo < 0 || venda < 0) {
+                showAlert('warning', 'Preencha todos os campos obrigatórios corretamente');
+                return;
+            }
+
+            if (custo >= venda) {
+                showAlert('danger', 'O preço de venda deve ser maior que o preço de custo');
+                return;
+            }
+
+            if (nome.length > 100) {
+                showAlert('warning', 'O nome do produto deve ter no máximo 100 caracteres');
+                return;
+            }
+
+            const produtoData = {
+                nome,
+                preco_custo: custo,
+                preco_venda: venda,
+                estoque,
+                categoria: categoria || null,
+                min_estoque: minEstoque,
+                barcode: barcode || null
+            };
+
+            const resultado = LojaDB.addProduto(produtoData);
+
+            if (resultado) {
+                showAlert('success', `Produto "${nome}" adicionado com sucesso!`);
+                clearProductForm();
+                loadProducts();
+                loadDashboard();
+                updateMovementSelect();
+            } else {
+                showAlert('danger', 'Erro ao salvar produto. Tente novamente.');
+            }
+        }
+
+        function clearProductForm() {
+            document.getElementById('produtoForm').reset();
+            document.getElementById('produtoEstoque').value = '0';
+            document.getElementById('produtoMinEstoque').value = '5';
+            document.getElementById('lucroCalculado').style.display = 'none';
+            document.getElementById('produtoNome').focus();
+        }
+
+        function editProduct(id) {
+            const produto = LojaDB.getProdutos().find(p => p.id === id);
+            if (!produto) {
+                showAlert('warning', 'Produto não encontrado');
+                return;
+            }
+
+            // Preencher formulário
+            document.getElementById('produtoNome').value = produto.nome;
+            document.getElementById('produtoCusto').value = produto.preco_custo;
+            document.getElementById('produtoVenda').value = produto.preco_venda;
+            document.getElementById('produtoEstoque').value = produto.estoque;
+            document.getElementById('produtoCategoria').value = produto.categoria || '';
+            document.getElementById('produtoMinEstoque').value = produto.min_estoque || 5;
+            document.getElementById('produtoBarcode').value = produto.barcode || '';
+
+            // Scroll para o form
+            scrollToProductForm();
+
+            // Mudar botão para "Atualizar"
+            const saveBtn = document.querySelector('#produtoForm button[type="submit"]');
+            saveBtn.innerHTML = '<i class="fas fa-edit me-1"></i>Atualizar Produto';
+            saveBtn.dataset.editingId = id;
+
+            calculateProductProfit();
+        }
+
+        function duplicateProduct(id) {
+            const original = LojaDB.getProdutos().find(p => p.id === id);
+            if (!original) return;
+
+            // Criar cópia
+            const copia = {
+                ...original,
+                id: null, // Será gerado novo ID
+                nome: `Cópia de ${original.nome}`,
+                createdAt: new Date().toISOString()
+            };
+
+            const resultado = LojaDB.addProduto(copia);
+
+            if (resultado) {
+                showAlert('success', `Produto duplicado com sucesso!`);
+                loadProducts();
+            }
+        }
+
+        function deleteProduct(id) {
+            if (confirm('Tem certeza que deseja excluir este produto?\n\nEsta ação também removerá todas as movimentações relacionadas.')) {
+                const produto = LojaDB.getProdutos().find(p => p.id === id);
+                if (produto) {
+                    LojaDB.deleteProduto(id);
+                    loadProducts();
+                    loadDashboard();
+                    updateMovementSelect();
+                    showAlert('success', `"${produto.nome}" excluído com sucesso`);
+                }
+            }
+        }
+
+        function deleteSelectedProducts() {
+            const selecionados = Array.from(document.querySelectorAll('.product-checkbox:checked'))
+                .map(cb => cb.value);
+
+            if (selecionados.length === 0) {
+                showAlert('warning', 'Selecione pelo menos um produto para excluir');
+                return;
+            }
+
+            if (confirm(`Deseja excluir ${selecionados.length} produto(s) selecionado(s)?`)) {
+                let count = 0;
+                selecionados.forEach(id => {
+                    LojaDB.deleteProduto(id);
+                    count++;
+                });
+
+                loadProducts();
+                loadDashboard();
+                updateMovementSelect();
+                showAlert('success', `${count} produto(s) excluído(s) com sucesso`);
+            }
+        }
+
+        function updateProductSelection() {
+            const selecionados = document.querySelectorAll('.product-checkbox:checked').length;
+            const total = document.querySelectorAll('.product-checkbox').length;
+            const selectAll = document.getElementById('selectAllProducts');
+
+            selectAll.indeterminate = selecionados > 0 && selecionados < total;
+            selectAll.checked = selecionados === total && total > 0;
+
+            // Atualizar botão de excluir
+            const deleteBtn = document.querySelector('.btn-outline-danger');
+            if (selecionados > 0) {
+                deleteBtn.innerHTML = `<i class="fas fa-trash me-1"></i>Excluir ${selecionados}`;
+                deleteBtn.classList.remove('disabled');
+            } else {
+                deleteBtn.innerHTML = '<i class="fas fa-trash me-1"></i>Excluir Selecionados';
+                deleteBtn.classList.add('disabled');
+            }
+        }
+
+        function toggleAllProducts() {
+            const isChecked = document.getElementById('selectAllProducts').checked;
+            document.querySelectorAll('.product-checkbox').forEach(cb => {
+                cb.checked = isChecked;
+            });
+            updateProductSelection();
+        }
+
+        // ========================================
+        // FUNÇÕES DE MOVIMENTAÇÕES
+        // ========================================
+
+        function updateMovementSelect() {
+            const select = document.getElementById('movProduto');
+            const produtos = LojaDB.getProdutos();
+
+            select.innerHTML = '<option value="">🔍 Selecione um produto...</option>';
+
+            produtos.forEach(produto => {
+                const option = document.createElement('option');
+                option.value = produto.id;
+                option.textContent = `${escapeHtml(produto.nome)} - R$ ${produto.preco_venda.toFixed(2)} (Est: ${produto.estoque})`;
+                option.dataset.preco = produto.preco_venda;
+                option.dataset.estoque = produto.estoque;
+                select.appendChild(option);
+            });
+        }
+
+        function updateStockWarning() {
+            const produtoId = document.getElementById('movProduto').value;
+            const tipo = document.getElementById('movTipo').value;
+            const quantidade = parseInt(document.getElementById('movQuantidade').value) || 0;
+
+            const warningDiv = document.getElementById('estoqueWarning');
+
+            if (tipo === 'saida' && produtoId && quantidade > 0) {
+                const produto = LojaDB.getProdutos().find(p => p.id === produtoId);
+                if (produto && quantidade > produto.estoque) {
+                    warningDiv.style.display = 'block';
+                    warningDiv.innerHTML = `
+            <i class="fas fa-exclamation-triangle text-warning me-1"></i>
+            <strong>Atenção:</strong> Estoque disponível: <strong>${produto.estoque}</strong>
+          `;
+                    document.querySelector('#movimentacaoForm button[type="submit"]').disabled = true;
+                } else {
+                    warningDiv.style.display = 'none';
+                    document.querySelector('#movimentacaoForm button[type="submit"]').disabled = false;
+                }
+            } else {
+                warningDiv.style.display = 'none';
+                document.querySelector('#movimentacaoForm button[type="submit"]').disabled = false;
+            }
+        }
+
+        function saveMovement() {
+            const produtoId = document.getElementById('movProduto').value;
+            const tipo = document.getElementById('movTipo').value;
+            const quantidade = parseInt(document.getElementById('movQuantidade').value);
+            const canal = document.getElementById('movCanal').value;
+
+            if (!produtoId || !quantidade || quantidade <= 0) {
+                showAlert('warning', 'Selecione um produto e quantidade válida');
+                return;
+            }
+
+            const resultado = LojaDB.addMovimentacao({
+                produtoId,
+                tipo,
+                quantidade,
+                canal
+            });
+
+            if (resultado.success) {
+                const produto = LojaDB.getProdutos().find(p => p.id === produtoId);
+                const acao = tipo === 'saida' ? 'vendido' : 'adicionado ao estoque';
+
+                showAlert('success', `
+          ✅ ${quantidade}x "${produto.nome}" ${acao}!<br>
+          <small>Novo estoque: ${resultado.novoEstoque || produto.estoque}</small>
+        `);
+
+                // Limpar form
+                document.getElementById('movQuantidade').value = '1';
+                document.getElementById('movProduto').selectedIndex = 0;
+
+                // Recarregar dados
+                loadDashboard();
+                loadProducts();
+                updateMovementSelect();
+                updateStockWarning();
+            } else {
+                showAlert('danger', resultado.error);
+            }
+        }
+
+        function loadRecentMovements() {
+            const recent = LojaDB.getMovimentacoes().slice(0, 5);
+            const produtos = LojaDB.getProdutos();
+            const container = document.getElementById('recentMovements');
+
+            if (recent.length === 0) {
+                container.innerHTML = `
+          <div class="list-group-item text-center text-muted py-4">
+            <i class="fas fa-clock fa-2x mb-2 d-block"></i>
+            <small>Nenhuma movimentação recente</small>
           </div>
         `;
-      }
-    }
+                return;
+            }
 
-    function updateMovimentoSelect() {
-      const select = document.getElementById('movProduto');
-      const produtos = db.getProdutos();
-      
-      select.innerHTML = '<option value="">Selecione um produto...</option>';
-      
-      produtos.forEach(produto => {
-        const option = document.createElement('option');
-        option.value = produto.id;
-        option.textContent = `${produto.nome} - R$ ${produto.preco_venda.toFixed(2)} (Estoque: ${produto.estoque})`;
-        select.appendChild(option);
-      });
-    }
+            container.innerHTML = recent.map(mov => {
+                const produto = produtos.find(p => p.id === mov.produtoId);
+                if (!produto) return '';
 
-    function updateStats() {
-      const stats = db.getEstatisticas();
-      
-      document.getElementById('totalVendas').textContent = stats.totalVendasHoje;
-      document.getElementById('totalLucro').textContent = `R$ ${stats.totalLucro.toFixed(2)}`;
-      document.getElementById('totalProdutos').textContent = stats.totalProdutos;
-      document.getElementById('totalEstoque').textContent = stats.totalEstoque;
-    }
+                const tempo = timeAgo(new Date(mov.data));
+                const tipoClass = mov.tipo === 'saida' ? 'text-danger' : 'text-success';
+                const canalIcon = mov.canal === 'online' ? 'fas fa-globe' : 'fas fa-store';
 
-    // ========================================
-    // OPERAÇÕES DE PRODUTOS
-    // ========================================
-
-    function saveProduto() {
-      const nome = document.getElementById('produtoNome').value.trim();
-      const custo = parseFloat(document.getElementById('produtoCusto').value);
-      const venda = parseFloat(document.getElementById('produtoVenda').value);
-      const estoque = parseInt(document.getElementById('produtoEstoque').value) || 0;
-      
-      if (!nome || isNaN(custo) || isNaN(venda) || custo < 0 || venda < 0 || custo >= venda) {
-        showAlert('danger', 'Preencha todos os campos corretamente. O preço de venda deve ser maior que o custo.');
-        return;
-      }
-      
-      const produtoData = { nome, preco_custo: custo, preco_venda: venda, estoque };
-      const resultado = db.addProduto(produtoData);
-      
-      if (resultado) {
-        showAlert('success', `Produto "${nome}" adicionado com sucesso!`);
-        clearProdutoForm();
-        loadProdutos();
-        loadDashboard();
-      } else {
-        showAlert('danger', 'Erro ao salvar produto. Tente novamente.');
-      }
-    }
-
-    function clearProdutoForm() {
-      document.getElementById('produtoNome').value = '';
-      document.getElementById('produtoCusto').value = '';
-      document.getElementById('produtoVenda').value = '';
-      document.getElementById('produtoEstoque').value = '0';
-      document.getElementById('produtoNome').focus();
-    }
-
-    function editProduto(id) {
-      const produto = db.getProdutos().find(p => p.id === id);
-      if (!produto) return;
-      
-      document.getElementById('produtoNome').value = produto.nome;
-      document.getElementById('produtoCusto').value = produto.preco_custo;
-      document.getElementById('produtoVenda').value = produto.preco_venda;
-      document.getElementById('produtoEstoque').value = produto.estoque;
-      
-      // Scroll suave para o form
-      document.getElementById('produtoNome').scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'center' 
-      });
-      
-      // Adicionar botão de cancelar
-      const saveBtn = document.querySelector('#produtos .btn-success');
-      if (!saveBtn.dataset.originalText) {
-        saveBtn.dataset.originalText = saveBtn.innerHTML;
-        saveBtn.innerHTML = '<i class="fas fa-save"></i> Atualizar Produto';
-      }
-    }
-
-    function deleteProduto(id) {
-      if (confirm('Tem certeza que deseja excluir este produto?\n\nTodas as movimentações relacionadas também serão removidas.')) {
-        db.deleteProduto(id);
-        loadProdutos();
-        loadDashboard();
-        updateMovimentoSelect();
-        showAlert('success', 'Produto excluído com sucesso');
-      }
-    }
-
-    // ========================================
-    // OPERAÇÕES DE MOVIMENTAÇÕES
-    // ========================================
-
-    function saveMovimentacao() {
-      const produtoId = document.getElementById('movProduto').value;
-      const tipo = document.getElementById('movTipo').value;
-      const quantidade = parseInt(document.getElementById('movQuantidade').value);
-      const canal = document.getElementById('movCanal').value;
-      
-      if (!produtoId || !quantidade || quantidade <= 0) {
-        showAlert('warning', 'Selecione um produto e informe uma quantidade válida');
-        return;
-      }
-      
-      const resultado = db.addMovimentacao({ 
-        produtoId, 
-        tipo, 
-        quantidade, 
-        canal 
-      });
-      
-      if (resultado && resultado.success !== false) {
-        const produto = db.getProdutos().find(p => p.id === produtoId);
-        const acao = tipo === 'saida' ? 'vendido' : 'adicionado';
-        showAlert('success', `${quantidade}x "${produto?.nome}" ${acao} com sucesso!`);
-        
-        // Limpar form
-        document.getElementById('movQuantidade').value = '1';
-        document.getElementById('movProduto').selectedIndex = 0;
-        
-        // Recarregar dados
-        loadDashboard();
-        loadProdutos();
-        updateMovimentoSelect();
-      } else {
-        showAlert('danger', resultado?.error || 'Erro ao registrar movimentação');
-      }
-    }
-
-    // ========================================
-    // CONFIGURAÇÕES
-    // ========================================
-
-    function changePassword() {
-      const novaSenha = prompt('Digite a nova senha (mínimo 6 caracteres):');
-      if (!novaSenha || novaSenha.length < 6) {
-        showAlert('warning', 'Senha deve ter pelo menos 6 caracteres');
-        return;
-      }
-      
-      const confirmacao = prompt('Confirme a nova senha:');
-      if (novaSenha !== confirmacao) {
-        showAlert('danger', 'As senhas não coincidem');
-        return;
-      }
-      
-      // Atualizar no localStorage
-      const userData = JSON.parse(localStorage.getItem('controle-loja-user') || '{}');
-      userData.password = novaSenha;
-      localStorage.setItem('controle-loja-user', JSON.stringify(userData));
-      
-      showAlert('success', 'Senha alterada com sucesso! Use a nova senha no próximo login.');
-    }
-
-    function resetPassword() {
-      if (confirm('Redefinir para a senha padrão (senha123)?')) {
-        const userData = JSON.parse(localStorage.getItem('controle-loja-user') || '{}');
-        userData.password = 'senha123';
-        localStorage.setItem('controle-loja-user', JSON.stringify(userData));
-        showAlert('success', 'Senha redefinida para "senha123"');
-      }
-    }
-
-    function exportData(formato) {
-      try {
-        const content = db.exportData(formato);
-        const blob = new Blob([content], { type: formato === 'csv' ? 'text/csv' : 'application/json' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        
-        a.href = url;
-        a.download = `backup-controle-loja-${new Date().toISOString().split('T')[0]}.${formato}`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-        
-        showAlert('success', `Backup ${formato.toUpperCase()} baixado com sucesso!`);
-      } catch (e) {
-        showAlert('danger', 'Erro ao gerar backup: ' + e.message);
-      }
-    }
-
-    function importData(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const content = e.target.result;
-        const formato = file.name.endsWith('.csv') ? 'csv' : 'json';
-        
-        const resultado = db.importData(content, formato);
-        
-        if (resultado.success) {
-          showAlert('success', `Importado com sucesso! ${resultado.count} registros adicionados.`);
-          loadAllData();
-          event.target.value = '';
-        } else {
-          showAlert('danger', resultado.error);
+                return `
+          <div class="list-group-item list-group-item-action border-start ${tipoClass}">
+            <div class="d-flex w-100 justify-content-between">
+              <div class="flex-grow-1">
+                <div class="d-flex align-items-center mb-1">
+                  <i class="fas fa-${mov.tipo === 'saida' ? 'shopping-cart' : 'truck-loading'} me-2 ${tipoClass}"></i>
+                  <strong>${mov.quantidade}x ${escapeHtml(produto.nome)}</strong>
+                </div>
+                <small class="text-muted">
+                  <i class="${canalIcon} me-1"></i>
+                  ${mov.canal === 'online' ? 'Online' : 'Loja Física'} • 
+                  <i class="fas fa-clock me-1"></i>${tempo}
+                </small>
+              </div>
+              <span class="badge ${tipoClass}">${formatCurrency(mov.lucro || 0)}</span>
+            </div>
+          </div>
+        `;
+            }).join('');
         }
-      };
-      
-      reader.readAsText(file);
-    }
 
-    function clearAllData() {
-      if (confirm('⚠️ ATENÇÃO: Isso apagará TODOS os dados permanentemente!\n\n' +
-                  '• Todos os produtos\n' +
-                  '• Todas as movimentações\n' +
-                  '• Histórico de vendas e lucros\n\n' +
-                  'Deseja realmente continuar?')) {
-        
-        if (confirm('🔴 CONFIRMAÇÃO FINAL\n\nEsta ação NÃO pode ser desfeita.\n' +
-                    'Você perderá todo o histórico da loja.\n\n' +
-                    'Clique "OK" apenas se tiver certeza.')) {
-          
-          db.clearAll();
-          loadAllData();
-          showAlert('warning', 'Todos os dados foram limpos. Adicione novos produtos!');
-          
-          // Redirecionar para login para "resetar" sessão
-          setTimeout(() => {
-            logout();
-          }, 2000);
+        function timeAgo(date) {
+            const now = new Date();
+            const diff = now - date;
+
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+
+            if (days > 0) return `${days}d atrás`;
+            if (hours > 0) return `${hours}h atrás`;
+            if (minutes > 0) return `${minutes}min atrás`;
+            return 'Agora';
         }
-      }
-    }
 
-    // ========================================
-    // UTILITÁRIOS
-    // ========================================
+        function getProductIcon(categoria) {
+            const icons = {
+                'roupas': 'tshirt',
+                'acessorios': 'gem',
+                'eletronicos': 'mobile-alt',
+                'calçados': 'shoe-prints',
+                'geral': 'box',
+                'outros': 'cubes'
+            };
+            return icons[categoria] || 'box';
+        }
 
-    function showAlert(tipo, mensagem, duracao = 4000) {
-      // Remove alert anterior
-      document.querySelectorAll('.alert-fixed').forEach(el => el.remove());
-      
-      const alert = document.createElement('div');
-      alert.className = `alert alert-${tipo} alert-dismissible fade show alert-fixed`;
-      alert.innerHTML = `
-        <div class="d-flex align-items-center">
-          <i class="fas ${tipo === 'success' ? 'fa-check-circle' : tipo === 'danger' ? 'fa-exclamation-circle' : 'fa-info-circle'} me-2"></i>
-          <div>${mensagem}</div>
-          <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+        // ========================================
+        // RELATÓRIOS
+        // ========================================
+
+        function generateRelatorio() {
+            const dataInicio = document.getElementById('relatorioDataInicio').value;
+            const dataFim = document.getElementById('relatorioDataFim').value;
+
+            if (!dataInicio || !dataFim) {
+                showAlert('warning', 'Selecione o período do relatório');
+                return;
+            }
+
+            if (new Date(dataInicio) > new Date(dataFim)) {
+                showAlert('warning', 'A data inicial deve ser anterior à data final');
+                return;
+            }
+
+            const movimentacoes = LojaDB.getMovimentacoes({
+                dataInicio,
+                dataFim
+            });
+            const produtos = LojaDB.getProdutos();
+
+            let totalVendas = 0, totalReceita = 0, totalLucro = 0;
+            const relatorioPorProduto = {};
+
+            movimentacoes.forEach(mov => {
+                const produto = produtos.find(p => p.id === mov.produtoId);
+                if (!produto || mov.tipo !== 'saida') return;
+
+                totalVendas += mov.quantidade;
+                totalReceita += mov.valor;
+                totalLucro += mov.lucro;
+
+                if (!relatorioPorProduto[produto.nome]) {
+                    relatorioPorProduto[produto.nome] = { qtd: 0, valor: 0, lucro: 0 };
+                }
+
+                relatorioPorProduto[produto.nome].qtd += mov.quantidade;
+                relatorioPorProduto[produto.nome].valor += mov.valor;
+                relatorioPorProduto[produto.nome].lucro += mov.lucro;
+            });
+
+            const container = document.getElementById('relatorioResultado');
+            container.innerHTML = `
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h6 class="mb-0">
+              <i class="fas fa-file-alt me-2"></i>
+              Relatório de ${new Date(dataInicio).toLocaleDateString('pt-BR')} a ${new Date(dataFim).toLocaleDateString('pt-BR')}
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="row text-center mb-4">
+              <div class="col-md-4">
+                <div class="card bg-light border-0 h-100">
+                  <div class="card-body">
+                    <i class="fas fa-shopping-cart fa-2x text-primary mb-2"></i>
+                    <h5>${totalVendas}</h5>
+                    <small class="text-muted">Itens Vendidos</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card bg-light border-0 h-100">
+                  <div class="card-body">
+                    <i class="fas fa-dollar-sign fa-2x text-success mb-2"></i>
+                    <h5>${formatCurrency(totalReceita)}</h5>
+                    <small class="text-muted">Receita Total</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card bg-light border-0 h-100">
+                  <div class="card-body">
+                    <i class="fas fa-chart-line fa-2x text-info mb-2"></i>
+                    <h5>${formatCurrency(totalLucro)}</h5>
+                    <small class="text-muted">Lucro Total</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <h6 class="mb-3">Vendas por Produto:</h6>
+            <div class="table-responsive">
+              <table class="table table-sm">
+                <thead class="table-light">
+                  <tr>
+                    <th>Produto</th>
+                    <th>Qtd Vendida</th>
+                    <th>Receita</th>
+                    <th>Lucro</th>
+                    <th>Margem</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${Object.entries(relatorioPorProduto).map(([nome, dados]) => {
+                const margem = ((dados.lucro / dados.valor) * 100).toFixed(1);
+                return `
+                      <tr>
+                        <td><strong>${escapeHtml(nome)}</strong></td>
+                        <td class="text-center">${dados.qtd}</td>
+                        <td class="text-end">${formatCurrency(dados.valor)}</td>
+                        <td class="text-end text-success">${formatCurrency(dados.lucro)}</td>
+                        <td class="text-end ${margem >= 50 ? 'text-success' : 'text-warning'}">${margem}%</td>
+                      </tr>
+                    `;
+            }).join('')}
+                </tbody>
+              </table>
+            </div>
+            
+            <div class="mt-4 text-center">
+              <button class="btn btn-success me-2" onclick="exportRelatorio('csv', {dataInicio, dataFim})">
+                <i class="fas fa-download me-1"></i>Baixar CSV
+              </button>
+              <button class="btn btn-info" onclick="printRelatorio({dataInicio, dataFim})">
+                <i class="fas fa-print me-1"></i>Imprimir
+              </button>
+            </div>
+          </div>
         </div>
       `;
-      
-      document.body.appendChild(alert);
-      
-      // Auto-remove
-      setTimeout(() => {
-        if (alert.parentNode) {
-          alert.remove();
         }
-      }, duracao);
-    }
 
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
+        function exportRelatorio(formato, filtros) {
+            if (formato === 'csv') {
+                LojaDB.exportCSV();
+            } else if (formato === 'pdf') {
+                // Placeholder para PDF (usar jsPDF em produção)
+                showAlert('info', 'Funcionalidade PDF em desenvolvimento');
+            } else {
+                showAlert('info', 'Formato não suportado');
+            }
+        }
 
-    function formatCurrency(valor) {
-      return new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-      }).format(valor);
-    }
+        function printRelatorio(filtros) {
+            const printWindow = window.open('', '_blank');
+            const relatorioHTML = generateRelatorioHTML(filtros);
+            printWindow.document.write(relatorioHTML);
+            printWindow.document.close();
+            printWindow.print();
+        }
 
-    function formatDate(isoString) {
-      return new Date(isoString).toLocaleString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-    }
+        function generateRelatorioHTML(filtros) {
+            // Implementar geração HTML para impressão
+            return `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Relatório de Vendas</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 40px; }
+            .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 20px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            th { background-color: #f2f2f2; font-weight: bold; }
+            .total { font-weight: bold; background-color: #f9f9f9; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>Relatório de Vendas</h1>
+            <p>Período: ${filtros.dataInicio} a ${filtros.dataFim}</p>
+            <p>Gerado em: ${new Date().toLocaleString('pt-BR')}</p>
+          </div>
+          <!-- Tabela seria gerada aqui -->
+          <p><em>Implementar tabela de relatório...</em></p>
+        </body>
+        </html>
+      `;
+        }
 
-    // ========================================
-    // FUNÇÕES DE EXPORTAÇÃO ESPECÍFICAS
-    // ========================================
+        // ========================================
+        // CONFIGURAÇÕES
+        // ========================================
 
-    function loadAllMovimentacoes() {
-      // Função para mostrar todas (sem limite de 25)
-      const todas = db.getMovimentacoes({ canal: document.getElementById('filterCanal').value });
-      const produtos = db.getProdutos();
-      
-      document.getElementById('dashboardTable').innerHTML = todas.map(mov => {
-        const produto = produtos.find(p => p.id === mov.produtoId);
-        if (!produto) return '';
-        
-        const dataFormatada = new Date(mov.data).toLocaleString('pt-BR');
-        const valor = mov.tipo === 'saida' ? formatCurrency(produto.preco_venda * mov.quantidade) : '-';
-        const lucro = mov.tipo === 'saida' ? formatCurrency((produto.preco_venda - produto.preco_custo) * mov.quantidade) : '-';
-        
-        return `
-          <tr>
-            <td>${dataFormatada}</td>
-            <td>${escapeHtml(produto.nome)}</td>
-            <td>${mov.tipo === 'saida' ? 'Saída' : 'Entrada'}</td>
-            <td>${mov.quantidade}</td>
-            <td>${mov.canal === 'online' ? 'Online' : 'Física'}</td>
-            <td>${valor}</td>
-            <td>${lucro}</td>
-          </tr>
-        `;
-      }).join('');
-    }
+        function changePassword() {
+            const novaSenha = prompt('Nova senha (mínimo 6 caracteres):');
+            if (!novaSenha || novaSenha.length < 6) {
+                showAlert('warning', 'Senha deve ter pelo menos 6 caracteres');
+                return;
+            }
 
-    // Inicialização final
-    if (typeof checkAuth === 'function') {
-      checkAuth();
-    }
-  </script>
+            const confirmacao = prompt('Confirme a nova senha:');
+            if (novaSenha !== confirmacao) {
+                showAlert('danger', 'As senhas não coincidem');
+                return;
+            }
+
+            // Atualizar sessão
+            const session = JSON.parse(localStorage.getItem('loja_session') || '{}');
+            session.passwordHash = simpleHash(novaSenha);
+            localStorage.setItem('loja_session', JSON.stringify(session));
+
+            showAlert('success', 'Senha alterada com sucesso! Use a nova senha no próximo login.');
+        }
+
+        function resetPassword() {
+            if (confirm('Redefinir para a senha padrão (senha123)?')) {
+                const session = JSON.parse(localStorage.getItem('loja_session') || '{}');
+                session.passwordHash = simpleHash('senha123');
+                localStorage.setItem('loja_session', JSON.stringify(session));
+
+                showAlert('success', 'Senha redefinida para "senha123"');
+            }
+        }
+
+        function saveSettings() {
+            const settings = {
+                autoBackup: document.getElementById('autoBackup').checked,
+                lowStockAlert: document.getElementById('lowStockAlert').checked,
+                stockAlertLevel: parseInt(document.getElementById('stockAlertLevel').value)
+            };
+
+            LojaDB.data.config.settings = settings;
+            LojaDB.save();
+
+            showAlert('success', 'Configurações salvas com sucesso');
+        }
+
+        function backupAllData(formato) {
+            try {
+                const data = {
+                    config: LojaDB.data.config,
+                    produtos: LojaDB.data.produtos,
+                    movimentacoes: LojaDB.data.movimentacoes,
+                    exportedAt: new Date().toISOString(),
+                    totalProdutos: LojaDB.data.produtos.length,
+                    totalMovimentacoes: LojaDB.data.movimentacoes.length
+                };
+
+                let content;
+                let mimeType;
+                let extension;
+
+                if (formato === 'csv') {
+                    content = LojaDB.exportCSV();
+                    mimeType = 'text/csv';
+                    extension = 'csv';
+                } else if (formato === 'json') {
+                    content = JSON.stringify(data, null, 2);
+                    mimeType = 'application/json';
+                    extension = 'json';
+                } else {
+                    content = generateBackupHTML(data);
+                    mimeType = 'text/html';
+                    extension = 'html';
+                }
+
+                const blob = new Blob([content], { type: mimeType + ';charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+
+                a.href = url;
+                a.download = `backup-loja-${new Date().toISOString().split('T')[0]}.${extension}`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                LojaDB.data.config.lastBackup = new Date().toISOString();
+                LojaDB.save();
+
+                showAlert('success', `Backup ${formato.toUpperCase()} gerado com sucesso!`);
+            } catch (e) {
+                showAlert('danger', 'Erro ao gerar backup: ' + e.message);
+            }
+        }
+
+        function importBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const content = e.target.result;
+                const formato = file.name.split('.').pop().toLowerCase();
+
+                const resultado = LojaDB.importData(content, formato);
+
+                if (resultado.success) {
+                    showAlert('success', `Backup importado! ${resultado.produtos} produtos e ${resultado.movimentacoes} movimentações adicionadas.`);
+                    loadAllData();
+                    event.target.value = '';
+                } else {
+                    showAlert('danger', `Erro na importação: ${resultado.error}`);
+                }
+            };
+
+            reader.readAsText(file);
+        }
+
+        function optimizeDatabase() {
+            const beforeSize = localStorage.getItem('controle_loja_v2').length;
+            const produtos = LojaDB.getProdutos();
+            const movimentacoes = LojaDB.getMovimentacoes();
+
+            // Remover dados órfãos (movimentações sem produto)
+            const validMovs = movimentacoes.filter(mov =>
+                produtos.some(produto => produto.id === mov.produtoId)
+            );
+
+            LojaDB.data.movimentacoes = validMovs;
+            LojaDB.save();
+
+            const afterSize = localStorage.getItem('controle_loja_v2').length;
+            const savings = ((beforeSize - afterSize) / 1024).toFixed(1);
+
+            showAlert('success', `Banco otimizado! Liberados ${savings}KB. Removidas ${movimentacoes.length - validMovs.length} movimentações órfãs.`);
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ ESTA AÇÃO É IRREVERSÍVEL!\n\n' +
+                'Você perderá permanentemente:\n' +
+                '• Todos os produtos cadastrados\n' +
+                '• Todo histórico de vendas\n' +
+                '• Estatísticas e relatórios\n\n' +
+                'Deseja realmente continuar?')) {
+
+                if (confirm('🔴 CONFIRMAÇÃO FINAL\n\n' +
+                    'Faça backup ANTES de confirmar!\n' +
+                    'Esta é sua ÚLTIMA chance.\n\n' +
+                    'Clique OK apenas se tiver certeza absoluta.')) {
+
+                    localStorage.removeItem('controle_loja_v2');
+                    localStorage.removeItem('loja_session');
+
+                    showAlert('danger', 'Todos os dados foram APAGADOS permanentemente!');
+
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                }
+            }
+        }
+
+        function backupBeforeClear() {
+            backupAllData('json');
+            setTimeout(() => {
+                if (confirm('Backup criado! Agora deseja limpar os dados?')) {
+                    clearAllData();
+                }
+            }, 1000);
+        }
+
+        // ========================================
+        // UTILITÁRIOS
+        // ========================================
+
+        function showAlert(tipo, mensagem, duracao = 5000) {
+            // Remove alert anterior
+            document.querySelectorAll('.alert-fixed').forEach(el => el.remove());
+
+            const alertTypes = {
+                'success': { icon: 'fa-check-circle', bg: 'success' },
+                'danger': { icon: 'fa-exclamation-circle', bg: 'danger' },
+                'warning': { icon: 'fa-exclamation-triangle', bg: 'warning' },
+                'info': { icon: 'fa-info-circle', bg: 'info' }
+            };
+
+            const config = alertTypes[tipo] || alertTypes['info'];
+
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${config.bg} alert-dismissible fade show alert-fixed shadow-lg`;
+            alert.style.maxHeight = '80vh';
+            alert.style.overflowY = 'auto';
+            alert.innerHTML = `
+        <div class="d-flex align-items-start">
+          <i class="fas ${config.icon} me-3 mt-1 text-white" style="font-size: 1.2rem; opacity: 0.9;"></i>
+          <div class="flex-grow-1">
+            <div>${mensagem}</div>
+          </div>
+          <button type="button" class="btn-close btn-close-white ms-2" data-bs-dismiss="alert"></button>
+        </div>
+      `;
+
+            document.body.appendChild(alert);
+
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.classList.remove('show');
+                    alert.classList.add('fade');
+                    setTimeout(() => alert.remove(), 300);
+                }
+            }, duracao);
+        }
+
+        function showLoading(show = true) {
+            const overlay = document.getElementById('loadingOverlay');
+            if (show) {
+                overlay.style.display = 'flex';
+            } else {
+                overlay.style.display = 'none';
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatCurrency(valor) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2
+            }).format(valor);
+        }
+
+        // ========================================
+        // INICIALIZAÇÃO FINAL
+        // ========================================
+
+        function loadAllData() {
+            showLoading(true);
+
+            // Carregar dados em paralelo
+            Promise.all([
+                new Promise(resolve => setTimeout(() => resolve(LojaDB.getProdutos()), 300)),
+                new Promise(resolve => setTimeout(() => resolve(LojaDB.getMovimentacoes()), 500))
+            ]).then(([produtos, movimentacoes]) => {
+                // Atualizar UI
+                updateUserDisplay();
+                loadProducts();
+                loadDashboard();
+                loadRecentMovements();
+                updateMovementSelect();
+
+                showLoading(false);
+                showAlert('success', `Bem-vindo! ${produtos.length} produtos e ${movimentacoes.length} movimentações carregados.`);
+            });
+        }
+
+        function updateUserDisplay() {
+            const session = JSON.parse(localStorage.getItem('loja_session') || '{}');
+            document.getElementById('userDisplay').textContent = session.username || 'Admin';
+        }
+
+        function setupTabNavigation() {
+            // Ativar tooltips do Bootstrap
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        }
+
+        // Auto-save a cada 30 segundos (apenas se houver mudanças)
+        let isDirty = false;
+        setInterval(() => {
+            if (isDirty) {
+                LojaDB.save();
+                isDirty = false;
+                console.log('💾 Auto-save executado');
+            }
+        }, 30000);
+
+        // Detectar mudanças
+        document.addEventListener('input', () => {
+            isDirty = true;
+        });
+
+        // Log de inicialização
+        console.log('%c🚀 Controle de Loja v2.0 - Inicializado com sucesso!',
+            'color: #0d6efd; font-size: 16px; font-weight: bold;');
+        console.log('📊 Produtos:', LojaDB.getProdutos().length);
+        console.log('📋 Movimentações:', LojaDB.getMovimentacoes().length);
+        console.log('💾 Armazenamento local ativo');
+
+        // Inicializar após carregamento
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        } else {
+            initializeApp();
+        }
+    </script>
 </body>
+
 </html>
