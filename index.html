@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏪 Controle de Loja</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,123,255,0.3);
+        }
+        
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .header-title span:first-child {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .nav-main {
+            background: #e9ecef;
+            padding: 10px 20px;
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+        }
+        
+        .nav-main a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: white;
+            color: #6c757d;
+            text-decoration: none;
+            border-radius: 8px;
+            white-space: nowrap;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+            font-weight: 500;
+        }
+        
+        .nav-main a.active {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+            box-shadow: 0 2px 8px rgba(0,123,255,0.3);
+        }
+        
+        .nav-main a:hover:not(.active) {
+            background: #f8f9fa;
+            color: #495057;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 20px;
+            background: white;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #007bff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .main-content {
+            display: flex;
+            min-height: calc(100vh - 180px);
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        .content-area {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #e9ecef;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f8f9fa;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .card-badge {
+            background: #007bff;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #495057;
+            font-size: 14px;
+        }
+        
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: white;
+        }
+        
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        
+        .tip-card {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border: 1px solid #ffeaa7;
+            border-left: 4px solid #ffc107;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .tip-card.info {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            border-color: #17a2b8;
+            border-left-color: #17a2b8;
+        }
+        
+        .tip-card.success {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-color: #28a745;
+            border-left-color: #28a2b8;
+        }
+        
+        .tip-card.warning {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border-color: #ffc107;
+            border-left-color: #ffc107;
+        }
+        
+        .tip-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-right: 8px;
+            font-weight: bold;
+            color: white;
+            font-size: 12px;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        
+        th {
+            background: #f8f9fa;
+            padding: 16px 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #e9ecef;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .channel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+        
+        .channel-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+            text-align: center;
+        }
+        
+        .channel-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-size: 24px;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border: 1px solid #f5c6cb;
+            border-left: 4px solid #dc3545;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .export-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+        
+        .export-item {
+            text-align: center;
+            padding: 16px;
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .export-item:hover {
+            border-color: #007bff;
+            background: #f8f9fa;
+        }
+        
+        .footer {
+            background: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                padding: 10px;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+            
+            .nav-main {
+                flex-wrap: wrap;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-title">
+            <span>🏪</span>
+            <span>Controle de Loja</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 12px; font-size: 12px;">Online</span>
+        </div>
+        <div class="user-info">
+            <div class="user-avatar">👤</div>
+            <div>
+                <div style="font-weight: 500;">Admin</div>
+                <a href="#" onclick="logout()" style="color: rgba(255,255,255,0.8); text-decoration: none; font-size: 14px;">Sair</a>
+            </div>
+        </div>
+    </div>
+
+    <nav class="nav-main">
+        <a href="#" onclick="showSection('dashboard')" class="active">
+            📊 Dashboard
+        </a>
+        <a href="#" onclick="showSection('produtos')">
+            📦 Produtos
+        </a>
+        <a href="#" onclick="showSection('movimentacoes')">
+            ➕ Movimentações
+        </a>
+        <a href="#" onclick="showSection('relatorios')">
+            📈 Relatórios
+        </a>
+        <a href="#" onclick="showSection('configuracoes')">
+            ⚙️ Configurações
+        </a>
+    </nav>
+
+    <div class="main-content">
+        <!-- Dashboard -->
+        <section id="dashboard" class="content-area">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📊 Filtros de Exibição</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 24px;">
+                    <div class="form-group">
+                        <label class="form-label">Canal</label>
+                        <select class="form-select">
+                            <option>👁️ Todos</option>
+                            <option>🛒 Online</option>
+                            <option>🏪 Física</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Período</label>
+                        <select class="form-select">
+                            <option>📅 Todos</option>
+                            <option>📅 Hoje</option>
+                            <option>📋 Semana</option>
+                            <option>📊 Mês</option>
+                            <option>📈 Ano</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Data</label>
+                        <input type="date" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-select">
+                            <option>📋 Todos</option>
+                            <option>📤 Vendas</option>
+                            <option>📥 Compras</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 24px;">🔄 Atualizar</button>
+                </div>
+            </div>
+
+            <div class="stat-grid">
+                <div class="stat-card" style="border-left: 4px solid #007bff;">
+                    <div class="stat-value" style="color: #007bff;">0</div>
+                    <div class="stat-label">🛒 Vendas Hoje</div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid #28a745;">
+                    <div class="stat-value" style="color: #28a745;">R$ 0,00</div>
+                    <div class="stat-label">💰 Lucro Total</div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid #17a2b8;">
+                    <div class="stat-value" style="color: #17a2b8;">0</div>
+                    <div class="stat-label">📦 Produtos</div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid #ffc107;">
+                    <div class="stat-value" style="color: #ffc107;">0</div>
+                    <div class="stat-label">📊 Estoque</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">📊 Vendas por Canal</h3>
+                </div>
+                <div class="channel-grid">
+                    <div class="channel-item">
+                        <div class="channel-icon" style="background: #007bff; color: white;">🏪</div>
+                        <div style="font-weight: 600; margin-bottom: 4px;">0</div>
+                        <div style="color: #6c757d; font-size: 14px;">Loja Física</div>
+                    </div>
+                    <div class="channel-item">
+                        <div class="channel-icon" style="background: #28a745; color: white;">🛒</div>
+                        <div style="font-weight: 600; margin-bottom: 4px;">0</div>
+                        <div style="color: #6c757d; font-size: 14px;">Online</div>
+                    </div>
+                    <div class="channel-item">
+                        <div class="channel-icon" style="background: #28a745; color: white;">💰</div>
+                        <div style="font-weight: 600; margin-bottom: 4px;">R$ 0,00</div>
+                        <div style="color: #6c757d; font-size: 14px;">Receita Total</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <h3 class="card-title">📋 Últimas Movimentações <span class="card-badge">0</span></h3>
+                        <div class="btn-group">
+                            <a href="#" class="btn btn-secondary">📄 CSV</a>
+                            <a href="#" class="btn btn-secondary">📃 PDF</a>
+                            <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimir</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>📅 Data</th>
+                                <th>🛍️ Produto</th>
+                                <th>➕ Tipo</th>
+                                <th># Qtd</th>
+                                <th>📱 Canal</th>
+                                <th>💰 Valor</th>
+                                <th>📈 Lucro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" style="text-align: center; color: #6c757d; padding: 40px;">Carregando movimentações...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="background: #343a40; color: white; padding: 16px; border-radius: 0 0 12px 12px; display: flex; justify-content: space-between; align-items: center; font-weight: 600;">
+                    <span>TOTAL:</span>
+                    <div>
+                        <span>0</span>
+                        <span style="margin: 0 20px;">R$ 0,00</span>
+                        <span>R$ 0,00</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Produtos -->
+        <section id="produtos" class="content-area hidden">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">➕ Novo Produto</h3>
+                </div>
+                <form id="productForm">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label class="form-label">Nome do Produto <span style="color: #dc3545;">*</span></label>
+                            <input type="text" class="form-input" id="productName" placeholder="Ex: Camiseta Polo Azul" maxlength="100" required>
+                            <small style="color: #6c757d;">Máximo 100 caracteres</small>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Categoria</label>
+                            <select class="form-select" id="productCategory">
+                                <option>Geral</option>
+                                <option>Roupas</option>
+                                <option>Acessórios</option>
+                                <option>Eletrônicos</option>
+                                <option>Outros</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label class="form-label">Preço de Custo <span style="color: #dc3545;">*</span> (R$)</label>
+                            <input type="number" class="form-input" id="productCost" step="0.01" placeholder="0.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Preço de Venda <span style="color: #dc3545;">*</span> (R$)</label>
+                            <input type="number" class="form-input" id="productSale" step="0.01" placeholder="0.00" required>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label class="form-label">Estoque Inicial</label>
+                            <input type="number" class="form-input" id="productStock" value="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ponto de Reposição</label>
+                            <input type="number" class="form-input" id="productReorder" value="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Código de Barras</label>
+                            <input type="text" class="form-input" id="productBarcode" placeholder="1234567890123">
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" onclick="addProduct()">💾 Salvar Produto</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearForm('productForm')">🗑️ Limpar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="tip-card warning">
+                <span class="tip-icon" style="background: #ffc107;">⚠️</span>
+                <strong>O preço de venda deve ser maior que o custo para gerar lucro</strong>
+            </div>
+            <div class="tip-card warning">
+                <span class="tip-icon" style="background: #ffc107;">⚠️</span>
+                <strong>Configure o ponto de reposição para receber alertas de estoque baixo</strong>
+            </div>
+            <div class="tip-card success">
+                <span class="tip-icon" style="background: #28a745;">✅</span>
+                <strong>Use códigos de barras para agilizar o registro de vendas</strong>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <h3 class="card-title">📋 Lista de Produtos <span class="card-badge">0</span></h3>
+                        <button class="btn btn-danger">🗑️ Excluir Selecionados</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox"></th>
+                                <th>Produto</th>
+                                <th>Custo</th>
+                                <th>Venda</th>
+                                <th>Estoque</th>
+                                <th>Lucro/Un</th>
+                                <th>Reposição</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTable">
+                            <tr>
+                                <td colspan="8" style="text-align: center; color: #6c757d; padding: 40px;">Nenhum produto cadastrado</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Movimentações -->
+        <section id="movimentacoes" class="content-area hidden">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">➕ Registrar Movimentação</h3>
+                </div>
+                <form id="movementForm">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label class="form-label">Produto <span style="color: #dc3545;">*</span></label>
+                            <select class="form-select" id="movementProduct" required>
+                                <option>Selecione um produto...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tipo <span style="color: #dc3545;">*</span></label>
+                            <select class="form-select" id="movementType" required>
+                                <option>Entrada</option>
+                                <option>Saída</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Canal <span style="color: #dc3545;">*</span></label>
+                            <select class="form-select" id="movementChannel" required>
+                                <option>Online</option>
+                                <option>Física</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Quantidade <span style="color: #dc3545;">*</span></label>
+                            <input type="number" class="form-input" id="movementQty" min="1" required>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success" onclick="registerMovement()">✅ Registrar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="tip-card info">
+                <span class="tip-icon" style="background: #17a2b8;">ℹ️</span>
+                <strong>Dica:</strong> Para saídas, verifique se há estoque suficiente. O sistema bloqueia vendas com estoque insuficiente.
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">📋 Últimas 5 Movimentações</h3>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Produto</th>
+                                <th>Tipo</th>
+                                <th>Qtd</th>
+                                <th>Canal</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentMovements">
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: #6c757d; padding: 40px;">Nenhuma movimentação registrada</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">📊 Histórico de Movimentações</h3>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Produto</th>
+                                <th>Tipo</th>
+                                <th>Qtd</th>
+                                <th>Canal</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="movementsTable">
+                            <tr>
+                                <td colspan="7" style="text-align: center; color: #6c757d; padding: 40px;">Nenhuma movimentação registrada</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Relatórios -->
+        <section id="relatorios" class="content-area hidden">
+            <div style="display: grid; grid-template-columns: 1fr 300px; gap: 20px;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📊 Resumo por Período</h3>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+                        <div class="form-group">
+                            <label class="form-label">Data Inicial</label>
+                            <input type="date" class="form-input" id="reportStart">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Data Final</label>
+                            <input type="date" class="form-input" id="reportEnd">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="generateReport()">📈 Gerar Relatório</button>
+                </div>
+
+                <div class="sidebar">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">📤 Exportar Relatórios</h3>
+                        </div>
+                        <div class="export-grid">
+                            <div class="export-item">
+                                <div style="font-size: 48px; margin-bottom: 8px;">📊</div>
+                                <div style="font-weight: 600; margin-bottom: 4px;">Exportar CSV</div>
+                                <div style="color: #6c757d; font-size: 12px;">Formato de planilha</div>
+                                <button class="btn btn-success" style="margin-top: 8px;">Exportar</button>
+                            </div>
+                            <div class="export-item">
+                                <div style="font-size: 48px; margin-bottom: 8px;">📄</div>
+                                <div style="font-weight: 600; margin-bottom: 4px;">Exportar PDF</div>
+                                <div style="color: #6c757d; font-size: 12px;">Formato imprimível</div>
+                                <button class="btn btn-danger" style="margin-top: 8px;">Exportar</button>
+                            </div>
+                            <div class="export-item">
+                                <div style="font-size: 48px; margin-bottom: 8px;">📈</div>
+                                <div style="font-weight: 600; margin-bottom: 4px;">Exportar Excel</div>
+                                <div style="color: #6c757d; font-size: 12px;">Formato avançado</div>
+                                <button class="btn btn-primary" style="margin-top: 8px;">Exportar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="reportOutput" class="card hidden" style="margin-top: 24px;">
+                <div class="card-header">
+                    <h3 class="card-title">📊 Relatório Gerado</h3>
+                </div>
+                <div id="reportContent"></div>
+            </div>
+
+            <div class="card" style="margin-top: 24px;">
+                <div class="card-header">
+                    <h3 class="card-title">📈 Gráfico de Vendas por Mês</h3>
+                </div>
+                <canvas id="salesChart" width="800" height="400" style="background: white; border-radius: 8px;"></canvas>
+            </div>
+        </section>
+
+        <!-- Configurações -->
+        <section id="configuracoes" class="content-area hidden">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">👤 Configurações do Usuário</h3>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Usuário Atual</label>
+                        <input type="text" class="form-input" value="admin" readonly style="background: #f8f9fa;">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="changePassword()">🔐 Mudar Senha</button>
+                        <button class="btn btn-secondary" onclick="resetUser()">🔄 Resetar</button>
+                    </div>
+                    <div class="tip-card info" style="margin-top: 16px;">
+                        <span class="tip-icon" style="background: #17a2b8;">ℹ️</span>
+                        A senha padrão é <strong>senha123</strong>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">💾 Armazenamento Local</h3>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tamanho DB</label>
+                        <div class="form-input" id="dbSize" style="text-align: center; background: #f8f9fa;">0 KB</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Registros</label>
+                        <div class="form-input" id="recordsCount" style="text-align: center; background: #f8f9fa;">0</div>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-danger" onclick="optimizeDB()">⚡ Otimizar DB</button>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">💼 Backup & Exportação</h3>
+                    </div>
+                    <div class="btn-group" style="flex-direction: column; gap: 12px;">
+                        <button class="btn btn-success">📊 Exportar CSV Completo</button>
+                        <button class="btn btn-primary">📄 Exportar JSON</button>
+                        <button class="btn btn-secondary">📃 Relatório HTML</button>
+                        <button class="btn btn-info" onclick="document.getElementById('importFile').click()">📥 Importar Dados</button>
+                        <input type="file" id="importFile" style="display: none;" accept=".json,.csv" onchange="importData(event)">
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">⚙️ Configurações do Sistema</h3>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="autoBackup"> Backup automático semanal
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="lowStockAlerts" checked> Alertas de estoque baixo
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ponto de alerta de estoque</label>
+                        <input type="number" class="form-input" id="alertThreshold" value="10" min="0">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-success" onclick="saveConfig()">💾 Salvar Configurações</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <div class="card-header">
+                    <h3 class="card-title" style="color: #721c24;">⚠️ Limpeza de Dados</h3>
+                </div>
+                <div style="margin: 16px 0;">
+                    <div style="color: #721c24; margin-bottom: 12px; font-weight: 600;">Atenção!</div>
+                    <p style="color: #721c24; margin-bottom: 12px;">Esta ação irá apagar permanentemente todos os dados do sistema:</p>
+                    <ul style="color: #721c24; margin-bottom: 16px;">
+                        <li>Todos os produtos cadastrados</li>
+                        <li>Todo o histórico de movimentações</li>
+                        <li>Relatórios e estatísticas</li>
+                        <li>Configurações personalizadas</li>
+                    </ul>
+                    <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 12px; border-radius: 6px; margin-bottom: 16px;">
+                        <strong style="color: #856404;">IMPORTANTE:</strong> Faça backup antes de continuar!
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-danger" onclick="clearAllData()">🗑️ Limpar Tudo</button>
+                    <button class="btn btn-secondary">💾 Backup Primeiro</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="sidebar">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">📋 Sistema de Controle de Loja v2.0</h3>
+                </div>
+                <div style="color: #6c757d; font-size: 14px; line-height: 1.5;">
+                    <p>Desenvolvido para GitHub Pages | 100% Offline</p>
+                    <p style="margin-top: 12px;">Dados armazenados localmente no navegador</p>
+                    <button class="btn btn-link" onclick="showChangelog()" style="color: #007bff; background: none; padding: 0; text-decoration: underline;">Ver histórico de versões</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data structures
+        let products = JSON.parse(localStorage.getItem('products')) || [];
+        let movements = JSON.parse(localStorage.getItem('movements')) || [];
+        let config = JSON.parse(localStorage.getItem('config')) || {
+            autoBackup: false,
+            lowStockAlerts: true,
+            alertThreshold: 10
+        };
+
+        // Initialize
+        window.addEventListener('load', function() {
+            updateProductSelect();
+            showSection('dashboard');
+            updateDashboard();
+            listProducts();
+            listMovements();
+            loadRecentMovements();
+            updateStorageInfo();
+            updateConfig();
+        });
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-area').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-main a').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update dashboard when switching to it
+            if (sectionId === 'dashboard') {
+                updateDashboard();
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('products', JSON.stringify(products));
+            localStorage.setItem('movements', JSON.stringify(movements));
+            localStorage.setItem('config', JSON.stringify(config));
+            updateStorageInfo();
+        }
+
+        function clearForm(formId) {
+            document.getElementById(formId).reset();
+        }
+
+        // Products
+        function updateProductSelect() {
+            const select = document.getElementById('movementProduct');
+            select.innerHTML = '<option value="">Selecione um produto...</option>';
+            products.forEach(product => {
+                const option = document.createElement('option');
+                option.value = product.id;
+                option.textContent = product.name;
+                select.appendChild(option);
+            });
+        }
+
+        function addProduct() {
+            const name = document.getElementById('productName').value.trim();
+            const category = document.getElementById('productCategory').value;
+            const cost = parseFloat(document.getElementById('productCost').value);
+            const sale = parseFloat(document.getElementById('productSale').value);
+            const stock = parseInt(document.getElementById('productStock').value) || 0;
+            const reorder = parseInt(document.getElementById('productReorder').value) || 0;
+            const barcode = document.getElementById('productBarcode').value.trim();
+
+            if (!name || cost <= 0 || sale <= 0 || sale <= cost) {
+                alert('Por favor, preencha todos os campos obrigatórios corretamente. O preço de venda deve ser maior que o custo.');
+                return;
+            }
+
+            const product = {
+                id: Date.now(),
+                name,
+                category,
+                cost,
+                sale,
+                stock,
+                reorder,
+                barcode
+            };
+
+            products.push(product);
+            saveData();
+            updateProductSelect();
+            listProducts();
+            updateDashboard();
+            clearForm('productForm');
+            alert('Produto cadastrado com sucesso!');
+        }
+
+        function listProducts() {
+            const tbody = document.getElementById('productsTable');
+            if (products.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #6c757d; padding: 40px;">Nenhum produto cadastrado</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = products.map(product => {
+                const profit = product.sale - product.cost;
+                return `
+                    <tr>
+                        <td><input type="checkbox" data-id="${product.id}"></td>
+                        <td>${product.name}</td>
+                        <td>R$ ${product.cost.toFixed(2)}</td>
+                        <td>R$ ${product.sale.toFixed(2)}</td>
+                        <td>${product.stock}</td>
+                        <td style="color: ${profit > 0 ? '#28a745' : '#dc3545'};">R$ ${profit.toFixed(2)}</td>
+                        <td>${product.reorder}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn btn-primary" onclick="editProduct(${product.id})" style="padding: 6px 12px; font-size: 12px;">✏️</button>
+                                <button class="btn btn-danger" onclick="deleteProduct(${product.id})" style="padding: 6px 12px; font-size: 12px;">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (product) {
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productCategory').value = product.category;
+                document.getElementById('productCost').value = product.cost;
+                document.getElementById('productSale').value = product.sale;
+                document.getElementById('productStock').value = product.stock;
+                document.getElementById('productReorder').value = product.reorder;
+                document.getElementById('productBarcode').value = product.barcode || '';
+                
+                // Change button to update mode
+                const saveBtn = document.querySelector('#productForm .btn-primary');
+                saveBtn.textContent = '💾 Atualizar Produto';
+                saveBtn.onclick = () => updateProduct(id);
+                
+                document.getElementById('productName').focus();
+            }
+        }
+
+        function updateProduct(id) {
+            const index = products.findIndex(p => p.id === id);
+            if (index === -1) return;
+
+            const name = document.getElementById('productName').value.trim();
+            const category = document.getElementById('productCategory').value;
+            const cost = parseFloat(document.getElementById('productCost').value);
+            const sale = parseFloat(document.getElementById('productSale').value);
+            const stock = parseInt(document.getElementById('productStock').value) || 0;
+            const reorder = parseInt(document.getElementById('productReorder').value) || 0;
+            const barcode = document.getElementById('productBarcode').value.trim();
+
+            if (!name || cost <= 0 || sale <= 0 || sale <= cost) {
+                alert('Por favor, preencha todos os campos obrigatórios corretamente.');
+                return;
+            }
+
+            products[index] = {
+                ...products[index],
+                name,
+                category,
+                cost,
+                sale,
+                stock,
+                reorder,
+                barcode
+            };
+
+            saveData();
+            updateProductSelect();
+            listProducts();
+            updateDashboard();
+            clearForm('productForm');
+            
+            // Reset save button
+            const saveBtn = document.querySelector('#productForm .btn-primary');
+            saveBtn.textContent = '💾 Salvar Produto';
+            saveBtn.onclick = addProduct;
+            
+            alert('Produto atualizado com sucesso!');
+        }
+
+        function deleteProduct(id) {
+            if (confirm('Tem certeza que deseja excluir este produto?')) {
+                products = products.filter(p => p.id !== id);
+                saveData();
+                updateProductSelect();
+                listProducts();
+                updateDashboard();
+                alert('Produto excluído com sucesso!');
+            }
+        }
+
+        // Movements
+        function registerMovement() {
+            const productId = parseInt(document.getElementById('movementProduct').value);
+            const type = document.getElementById('movementType').value;
+            const channel = document.getElementById('movementChannel').value;
+            const qty = parseInt(document.getElementById('movementQty').value);
+
+            if (!productId || !qty || qty <= 0) {
+                alert('Por favor, selecione um produto e informe uma quantidade válida.');
+                return;
+            }
+
+            const product = products.find(p => p.id === productId);
+            if (!product) {
+                alert('Produto não encontrado.');
+                return;
+            }
+
+            if (type === 'Saída' && product.stock < qty) {
+                alert(`Estoque insuficiente! Disponível: ${product.stock}, Solicitado: ${qty}`);
+                return;
+            }
+
+            const value = type === 'Entrada' ? product.cost * qty : product.sale * qty;
+            const profit = type === 'Saída' ? (product.sale - product.cost) * qty : 0;
+            const date = new Date().toISOString().split('T')[0];
+
+            const movement = {
+                id: Date.now(),
+                date,
+                productId,
+                type,
+                qty,
+                channel,
+                value,
+                profit,
+                status: 'Concluída'
+            };
+
+            movements.push(movement);
+            
+            // Update stock
+            product.stock += type === 'Entrada' ? qty : -qty;
+
+            // Check low stock alert
+            if (config.lowStockAlerts && product.stock < product.reorder && product.reorder > 0) {
+                alert(`⚠️ Alerta: Estoque baixo para "${product.name}"! Restante: ${product.stock}`);
+            }
+
+            saveData();
+            updateProductSelect();
+            listProducts();
+            listMovements();
+            loadRecentMovements();
+            updateDashboard();
+            clearForm('movementForm');
+            alert('Movimentação registrada com sucesso!');
+        }
+
+        function listMovements() {
+            const tbody = document.getElementById('movementsTable');
+            if (movements.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #6c757d; padding: 40px;">Nenhuma movimentação registrada</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = movements.map(movement => {
+                const product = products.find(p => p.id === movement.productId);
+                return `
+                    <tr>
+                        <td>${movement.date}</td>
+                        <td>${product ? product.name : 'Produto não encontrado'}</td>
+                        <td style="color: ${movement.type === 'Entrada' ? '#28a745' : '#007bff'}; font-weight: 500;">${movement.type}</td>
+                        <td>${movement.qty}</td>
+                        <td style="text-transform: capitalize;">${movement.channel}</td>
+                        <td>R$ ${movement.value.toFixed(2)}</td>
+                        <td><span style="background: #d4edda; color: #155724; padding: 4px 8px; border-radius: 12px; font-size: 12px;">${movement.status}</span></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function loadRecentMovements() {
+            const tbody = document.getElementById('recentMovements');
+            const recent = movements.slice(-5).reverse();
+            
+            if (recent.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #6c757d; padding: 40px;">Nenhuma movimentação registrada</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = recent.map(movement => {
+                const product = products.find(p => p.id === movement.productId);
+                return `
+                    <tr>
+                        <td>${movement.date}</td>
+                        <td>${product ? product.name : 'Produto não encontrado'}</td>
+                        <td style="color: ${movement.type === 'Entrada' ? '#28a745' : '#007bff'}; font-weight: 500;">${movement.type}</td>
+                        <td>${movement.qty}</td>
+                        <td style="text-transform: capitalize;">${movement.channel}</td>
+                        <td>R$ ${movement.value.toFixed(2)}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Dashboard
+        function updateDashboard() {
+            const today = new Date().toISOString().split('T')[0];
+            const todaySales = movements.filter(m => m.date === today && m.type === 'Saída').reduce((sum, m) => sum + m.qty, 0);
+            const totalProfit = movements.reduce((sum, m) => sum + (m.profit || 0), 0);
+            const totalProducts = products.length;
+            const totalStock = products.reduce((sum, p) => sum + p.stock, 0);
+            const physicalSales = movements.filter(m => m.channel === 'Física' && m.type === 'Saída').reduce((sum, m) => sum + m.qty, 0);
+            const onlineSales = movements.filter(m => m.channel === 'Online' && m.type === 'Saída').reduce((sum, m) => sum + m.qty, 0);
+            const totalRevenue = movements.filter(m => m.type === 'Saída').reduce((sum, m) => sum + m.value, 0);
+
+            // Update stats
+            document.querySelector('.stat-card:nth-child(1) .stat-value').textContent = todaySales;
+            document.querySelector('.stat-card:nth-child(2) .stat-value').textContent = `R$ ${totalProfit.toFixed(2)}`;
+            document.querySelector('.stat-card:nth-child(3) .stat-value').textContent = totalProducts;
+            document.querySelector('.stat-card:nth-child(4) .stat-value').textContent = totalStock;
+
+            // Update channel sales
+            document.querySelector('.channel-item:nth-child(1) div:nth-child(2)').textContent = physicalSales;
+            document.querySelector('.channel-item:nth-child(2) div:nth-child(2)').textContent = onlineSales;
+            document.querySelector('.channel-item:nth-child(3) div:nth-child(2)').textContent = `R$ ${totalRevenue.toFixed(2)}`;
+
+            // Update movements table
+            updateDashboardMovements();
+        }
+
+        function updateDashboardMovements() {
+            const tbody = document.querySelector('#dashboard tbody');
+            const recent = movements.slice(-10).reverse();
+            
+            if (recent.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #6c757d; padding: 40px;">Carregando movimentações...</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = recent.map(movement => {
+                const product = products.find(p => p.id === movement.productId);
+                return `
+                    <tr>
+                        <td>${movement.date}</td>
+                        <td>${product ? product.name : 'Produto não encontrado'}</td>
+                        <td style="color: ${movement.type === 'Entrada' ? '#28a745' : '#007bff'}; font-weight: 500;">${movement.type}</td>
+                        <td>${movement.qty}</td>
+                        <td style="text-transform: capitalize;">${movement.channel}</td>
+                        <td>R$ ${movement.value.toFixed(2)}</td>
+                        <td style="color: ${movement.profit > 0 ? '#28a745' : '#6c757d'};">R$ ${movement.profit.toFixed(2)}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Update totals
+            const totalQty = recent.reduce((sum, m) => sum + m.qty, 0);
+            const totalValue = recent.reduce((sum, m) => sum + m.value, 0);
+            const totalProfit = recent.reduce((sum, m) => sum + (m.profit || 0), 0);
+            
+            const totalRow = document.createElement('tr');
+            totalRow.style.background = '#343a40';
+            totalRow.style.color = 'white';
+            totalRow.innerHTML = `
+                <td colspan="3" style="font-weight: 600;">TOTAL:</td>
+                <td style="font-weight: 600;">${totalQty}</td>
+                <td></td>
+                <td style="font-weight: 600;">R$ ${totalValue.toFixed(2)}</td>
+                <td style="font-weight: 600;">R$ ${totalProfit.toFixed(2)}</td>
+            `;
+            tbody.appendChild(totalRow);
+        }
+
+        // Reports
+        function generateReport() {
+            const start = document.getElementById('reportStart').value;
+            const end = document.getElementById('reportEnd').value;
+            
+            if (!start || !end) {
+                alert('Por favor, selecione as datas inicial e final.');
+                return;
+            }
+
+            if (new Date(start) > new Date(end)) {
+                alert('A data inicial não pode ser maior que a data final.');
+                return;
+            }
+
+            const filteredMovements = movements.filter(m => m.date >= start && m.date <= end);
+            const totalQty = filteredMovements.reduce((sum, m) => sum + m.qty, 0);
+            const totalValue = filteredMovements.reduce((sum, m) => sum + m.value, 0);
+            const totalProfit = filteredMovements.reduce((sum, m) => sum + (m.profit || 0), 0);
+            const salesCount = filteredMovements.filter(m => m.type === 'Saída').length;
+            const purchasesCount = filteredMovements.filter(m => m.type === 'Entrada').length;
+
+            const reportOutput = document.getElementById('reportOutput');
+            const reportContent = document.getElementById('reportContent');
+            
+            reportContent.innerHTML = `
+                <div style="background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+                    <h2 style="margin: 0; font-size: 24px;">📊 Relatório de Movimentações</h2>
+                    <p style="margin: 8px 0 0 0; opacity: 0.9;">Período: ${start} a ${end}</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 24px;">
+                    <div class="stat-card" style="border-left: 4px solid #28a745;">
+                        <div class="stat-value" style="color: #28a745;">${totalQty}</div>
+                        <div class="stat-label">📦 Total de Itens</div>
+                    </div>
+                    <div class="stat-card" style="border-left: 4px solid #007bff;">
+                        <div class="stat-value" style="color: #007bff;">${salesCount}</div>
+                        <div class="stat-label">🛒 Vendas</div>
+                    </div>
+                    <div class="stat-card" style="border-left: 4px solid #6c757d;">
+                        <div class="stat-value" style="color: #6c757d;">${purchasesCount}</div>
+                        <div class="stat-label">📥 Compras</div>
+                    </div>
+                    <div class="stat-card" style="border-left: 4px solid #28a745;">
+                        <div class="stat-value" style="color: #28a745;">R$ ${totalProfit.toFixed(2)}</div>
+                        <div class="stat-label">💰 Lucro Total</div>
+                    </div>
+                </div>
+
+                <div class="table-container" style="margin-top: 20px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Produto</th>
+                                <th>Tipo</th>
+                                <th>Qtd</th>
+                                <th>Canal</th>
+                                <th>Valor</th>
+                                <th>Lucro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${filteredMovements.length === 0 ? 
+                                '<tr><td colspan="7" style="text-align: center; color: #6c757d; padding: 40px;">Nenhuma movimentação encontrada no período selecionado</td></tr>' :
+                                filteredMovements.map(movement => {
+                                    const product = products.find(p => p.id === movement.productId);
+                                    return `
+                                        <tr>
+                                            <td>${movement.date}</td>
+                                            <td>${product ? product.name : 'Produto não encontrado'}</td>
+                                            <td style="color: ${movement.type === 'Entrada' ? '#28a745' : '#007bff'}; font-weight: 500;">${movement.type}</td>
+                                            <td>${movement.qty}</td>
+                                            <td style="text-transform: capitalize;">${movement.channel}</td>
+                                            <td>R$ ${movement.value.toFixed(2)}</td>
+                                            <td style="color: ${movement.profit > 0 ? '#28a745' : '#6c757d'};">R$ ${movement.profit.toFixed(2)}</td>
+                                        </tr>
+                                    `;
+                                }).join('')
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="background: #343a40; color: white; padding: 16px; border-radius: 0 0 12px 12px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin-top: 0;">
+                    <span>TOTAL DO PERÍODO:</span>
+                    <div>
+                        <span style="margin-right: 20px;">${totalQty} itens</span>
+                        <span style="margin-right: 20px;">R$ ${totalValue.toFixed(2)}</span>
+                        <span>R$ ${totalProfit.toFixed(2)}</span>
+                    </div>
+                </div>
+            `;
+
+            reportOutput.classList.remove('hidden');
+            reportOutput.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Config and utilities
+        function updateConfig() {
+            document.getElementById('autoBackup').checked = config.autoBackup;
+            document.getElementById('lowStockAlerts').checked = config.lowStockAlerts;
+            document.getElementById('alertThreshold').value = config.alertThreshold;
+        }
+
+        function saveConfig() {
+            config.autoBackup = document.getElementById('autoBackup').checked;
+            config.lowStockAlerts = document.getElementById('lowStockAlerts').checked;
+            config.alertThreshold = parseInt(document.getElementById('alertThreshold').value) || 10;
+            saveData();
+            alert('Configurações salvas com sucesso!');
+        }
+
+        function changePassword() {
+            const newPassword = prompt('Digite a nova senha:');
+            if (newPassword && newPassword.length >= 6) {
+                config.password = newPassword;
+                saveData();
+                alert('Senha alterada com sucesso!');
+            } else if (newPassword) {
+                alert('A senha deve ter pelo menos 6 caracteres.');
+            }
+        }
+
+        function resetUser() {
+            if (confirm('Deseja realmente resetar as configurações do usuário?')) {
+                config = { ...config, password: 'senha123' };
+                saveData();
+                updateConfig();
+                alert('Configurações resetadas!');
+            }
+        }
+
+        function optimizeDB() {
+            const originalCount = movements.length;
+            const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+            movements = movements.filter(m => m.date >= thirtyDaysAgo);
+            
+            if (movements.length < originalCount) {
+                saveData();
+                alert(`Banco de dados otimizado! ${originalCount - movements.length} registros antigos removidos.`);
+            } else {
+                alert('Nenhum dado antigo encontrado para otimização.');
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ ATENÇÃO: Esta ação apagará TODOS os dados permanentemente!\n\nDeseja realmente continuar?')) {
+                if (confirm('TEM CERTEZA? Todos os produtos, movimentações e configurações serão perdidos!')) {
+                    localStorage.clear();
+                    products = [];
+                    movements = [];
+                    config = { autoBackup: false, lowStockAlerts: true, alertThreshold: 10 };
+                    saveData();
+                    updateAll();
+                    alert('Todos os dados foram limpos com sucesso!');
+                    showSection('dashboard');
+                }
+            }
+        }
+
+        function updateStorageInfo() {
+            try {
+                const dataStr = JSON.stringify({ products, movements, config });
+                const sizeInKB = new Blob([dataStr]).size / 1024;
+                const totalRecords = products.length + movements.length;
+                
+                document.getElementById('dbSize').textContent = `${sizeInKB.toFixed(1)} KB`;
+                document.getElementById('recordsCount').textContent = totalRecords;
+            } catch (e) {
+                document.getElementById('dbSize').textContent = 'Erro';
+                document.getElementById('recordsCount').textContent = 'Erro';
+            }
+        }
+
+        function updateAll() {
+            updateProductSelect();
+            listProducts();
+            listMovements();
+            loadRecentMovements();
+            updateDashboard();
+            updateConfig();
+            updateStorageInfo();
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    if (importedData.products) {
+                        products = importedData.products.map(p => ({ ...p, id: p.id || Date.now() + Math.random() }));
+                    }
+                    if (importedData.movements) {
+                        movements = importedData.movements.map(m => ({ ...m, id: m.id || Date.now() + Math.random() }));
+                    }
+                    if (importedData.config) {
+                        config = { ...config, ...importedData.config };
+                    }
+                    
+                    saveData();
+                    updateAll();
+                    alert('Dados importados com sucesso!');
+                } catch (error) {
+                    alert('Erro ao importar os dados. Verifique se o arquivo está no formato correto (JSON).');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function logout() {
+            if (confirm('Deseja realmente sair do sistema?')) {
+                location.reload();
+            }
+        }
+
+        function showChangelog() {
+            alert('📝 Histórico de Versões\n\nv2.0 - Layout moderno com design inspirado em interfaces profissionais\nv1.0 - Sistema básico de controle de estoque');
+        }
+
+        // Export functions (basic implementations)
+        function exportCSV() {
+            if (movements.length === 0) {
+                alert('Nenhuma movimentação para exportar.');
+                return;
+            }
+            
+            let csv = 'Data,Produto,Tipo,Quantidade,Canal,Valor,Lucro,Status\n';
+            movements.forEach(m => {
+                const product = products.find(p => p.id === m.productId);
+                csv += `"${m.date}","${product ? product.name : 'N/A'}","${m.type}",${m.qty},"${m.channel}",${m.value},${m.profit},"${m.status}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `movimentacoes_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+
+        function exportJSON() {
+            const exportData = { products, movements, config, exportDate: new Date().toISOString() };
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `backup_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+        }
+    </script>
+</body>
+</html>
