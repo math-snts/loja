@@ -3,304 +3,588 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Controle de Loja - Dashboard</title>
+  <title>Dashboard - Controle de Loja</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0d6efd">
+  <style>
+    :root {
+      --primary-color: #0d6efd;
+      --success-color: #198754;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --info-color: #0dcaf0;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .navbar {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: white !important;
+    }
+
+    .nav-tabs {
+      border-bottom: 2px solid #dee2e6;
+      margin-bottom: 1.5rem;
+    }
+
+    .nav-tabs .nav-link {
+      border: none;
+      border-radius: 8px 8px 0 0;
+      padding: 0.75rem 1.5rem;
+      font-weight: 500;
+      color: #6c757d;
+      margin-right: 0.25rem;
+    }
+
+    .nav-tabs .nav-link.active {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+
+    .nav-tabs .nav-link:hover {
+      color: var(--primary-color);
+      background: rgba(13, 110, 253, 0.05);
+    }
+
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border: none;
+      font-weight: 600;
+      color: #495057;
+      padding: 1rem 1.5rem;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .stat-card {
+      border-radius: 12px;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .stat-card h5 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .stat-card small {
+      opacity: 0.9;
+      font-size: 0.85rem;
+    }
+
+    .table {
+      margin-bottom: 0;
+    }
+
+    .table th {
+      background: #f8f9fa;
+      font-weight: 600;
+      color: #495057;
+      border-top: none;
+      padding: 1rem 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .table td {
+      padding: 0.75rem;
+      vertical-align: middle;
+      border-color: #f1f3f4;
+    }
+
+    .table-hover tbody tr:hover {
+      background-color: rgba(13, 110, 253, 0.03);
+    }
+
+    .btn {
+      border-radius: 6px;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      margin: 0.125rem;
+      border: none;
+    }
+
+    .btn-sm {
+      padding: 0.25rem 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    .form-control, .form-select {
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+      padding: 0.625rem 0.75rem;
+      font-size: 0.95rem;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+    }
+
+    .badge {
+      font-size: 0.8rem;
+      padding: 0.4em 0.6em;
+    }
+
+    .low-stock {
+      background: #fff3cd !important;
+      color: #856404 !important;
+    }
+
+    .alert-fixed {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      min-width: 300px;
+      max-width: 400px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ffffff20;
+      border-top: 2px solid #fff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 0.5rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .stat-card h5 {
+        font-size: 1.25rem;
+      }
+      
+      .nav-tabs .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+      }
+      
+      .table {
+        font-size: 0.9rem;
+      }
+      
+      .table th, .table td {
+        padding: 0.5rem 0.25rem;
+      }
+    }
+
+    /* Scrollbar customizada */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #0b5ed7;
+    }
+  </style>
 </head>
 <body>
-  <!-- Login Screen -->
-  <div id="login-screen" class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="card shadow" style="width: 100%; max-width: 400px;">
-      <div class="card-body text-center">
-        <h2 class="card-title mb-4">🔐 Login</h2>
-        <p class="text-muted small mb-3">Credenciais padrão: <strong>admin / senha123</strong></p>
-        <div class="mb-3">
-          <input type="text" id="username" class="form-control" placeholder="Usuário" autocomplete="username">
-        </div>
-        <div class="mb-3">
-          <input type="password" id="password" class="form-control" placeholder="Senha" autocomplete="current-password">
-        </div>
-        <button onclick="login()" class="btn btn-primary w-100 mb-2">Entrar</button>
-        <div class="text-danger small" id="login-error" style="display: none;"></div>
-        <hr>
-        <p class="text-muted small mt-3 mb-0">App local - dados salvos no navegador</p>
-      </div>
+  <!-- Verificação de autenticação -->
+  <div id="loadingScreen" class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+    <div class="text-center">
+      <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+      <div class="text-muted">Carregando sistema...</div>
     </div>
   </div>
 
-  <!-- Main App -->
-  <div id="app-screen" class="container-fluid" style="display: none;">
-    <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
+  <!-- App Principal (escondido inicialmente) -->
+  <div id="appMain" style="display: none;">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container-fluid">
-        <span class="navbar-brand">🏪 Controle de Loja</span>
-        <div class="navbar-nav ms-auto">
-          <span class="navbar-text me-3" id="user-info">Admin</span>
-          <button class="btn btn-outline-light btn-sm" onclick="logout()">Sair</button>
+        <a class="navbar-brand" href="#">
+          <span class="me-2">🏪</span>Controle de Loja
+        </a>
+        <div class="navbar-nav ms-auto align-items-center">
+          <span class="navbar-text me-3 text-white-50">
+            <span class="me-1">👤</span><span id="userName">Carregando...</span>
+          </span>
+          <button class="btn btn-outline-light btn-sm" onclick="logout()">
+            <span class="me-1">🚪</span>Sair
+          </button>
         </div>
       </div>
     </nav>
 
-    <!-- Tabs -->
-    <ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab">
-          📊 Dashboard
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="produtos-tab" data-bs-toggle="tab" data-bs-target="#produtos" type="button" role="tab">
-          ➕ Produtos
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="movimentacoes-tab" data-bs-toggle="tab" data-bs-target="#movimentacoes" type="button" role="tab">
-          📦 Movimentações
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="config-tab" data-bs-toggle="tab" data-bs-target="#config" type="button" role="tab">
-          ⚙️ Configurações
-        </button>
-      </li>
-    </ul>
+    <div class="container-fluid mt-4">
+      <!-- Tabs de Navegação -->
+      <ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab">
+            <span class="me-1">📊</span>Dashboard
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="produtos-tab" data-bs-toggle="tab" data-bs-target="#produtos" type="button" role="tab">
+            <span class="me-1">📦</span>Produtos
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="movimentacoes-tab" data-bs-toggle="tab" data-bs-target="#movimentacoes" type="button" role="tab">
+            <span class="me-1">📋</span>Movimentações
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="config-tab" data-bs-toggle="tab" data-bs-target="#config" type="button" role="tab">
+            <span class="me-1">⚙️</span>Configurações
+          </button>
+        </li>
+      </ul>
 
-    <!-- Tab Content -->
-    <div class="tab-content" id="mainTabContent">
-      <!-- Dashboard Tab -->
-      <div class="tab-pane fade show active" id="dashboard" role="tabpanel">
-        <div class="row mb-3">
-          <div class="col-md-3">
-            <label class="form-label">Canal</label>
-            <select id="filtro-canal" class="form-select">
-              <option value="todos">Todos</option>
-              <option value="online">🛒 Online</option>
-              <option value="fisica">🏪 Física</option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">Período</label>
-            <select id="filtro-periodo" class="form-select">
-              <option value="">Todos</option>
-              <option value="dia">Hoje</option>
-              <option value="semana">Esta Semana</option>
-              <option value="mes">Este Mês</option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label" id="data-label">Data Base</label>
-            <input type="date" id="filtro-data" class="form-control" style="display: none;">
-          </div>
-          <div class="col-md-3 d-flex align-items-end">
-            <button class="btn btn-primary w-100" onclick="loadDashboard()">🔄 Atualizar</button>
-          </div>
-        </div>
-        
-        <div class="row mb-3">
-          <div class="col-md-3">
-            <div class="card bg-primary text-white">
-              <div class="card-body text-center">
-                <h5 id="total-vendas">0</h5>
-                <small>Total Vendas</small>
-              </div>
+      <div class="tab-content" id="mainTabContent">
+        <!-- Dashboard Tab -->
+        <div class="tab-pane fade show active" id="dashboard" role="tabpanel">
+          <!-- Filtros -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Filtro por Canal</label>
+              <select id="filterCanal" class="form-select">
+                <option value="todos">👁️ Todos os canais</option>
+                <option value="online">🛒 Online</option>
+                <option value="fisica">🏪 Loja Física</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Período</label>
+              <select id="filterPeriodo" class="form-select">
+                <option value="">📅 Todos os períodos</option>
+                <option value="hoje">📅 Hoje</option>
+                <option value="semana">📋 Esta Semana</option>
+                <option value="mes">📊 Este Mês</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Data Base</label>
+              <input type="date" id="filterData" class="form-control" style="display: none;">
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+              <button class="btn btn-primary w-100" onclick="loadDashboard()">
+                <span class="me-2">🔄</span>Atualizar Dashboard
+              </button>
             </div>
           </div>
-          <div class="col-md-3">
-            <div class="card bg-success text-white">
-              <div class="card-body text-center">
-                <h5 id="total-lucro">R$ 0,00</h5>
-                <small>Total Lucro</small>
-              </div>
+
+          <!-- Cards de Estatísticas -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-3">
+              <a href="#" class="stat-card text-white text-decoration-none bg-primary" onclick="loadDashboard()">
+                <h5 id="totalVendas">0</h5>
+                <small>Vendas Hoje</small>
+              </a>
             </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card bg-info text-white">
-              <div class="card-body text-center">
-                <h5 id="total-produtos">0</h5>
+            <div class="col-md-3">
+              <a href="#" class="stat-card text-white text-decoration-none bg-success" onclick="loadDashboard()">
+                <h5 id="totalLucro">R$ 0,00</h5>
+                <small>Lucro Total</small>
+              </a>
+            </div>
+            <div class="col-md-3">
+              <a href="#" class="stat-card text-white text-decoration-none bg-info" onclick="loadProdutos()">
+                <h5 id="totalProdutos">0</h5>
                 <small>Produtos</small>
-              </div>
+              </a>
             </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card bg-warning text-white">
-              <div class="card-body text-center">
-                <h5 id="total-estoque">0</h5>
+            <div class="col-md-3">
+              <a href="#" class="stat-card text-white text-decoration-none bg-warning" onclick="loadDashboard()">
+                <h5 id="totalEstoque">0</h5>
                 <small>Estoque Total</small>
+              </a>
+            </div>
+          </div>
+
+          <!-- Tabela de Movimentações -->
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h6 class="mb-0 fw-semibold">
+                <span class="me-2">📋</span>Últimas Movimentações
+              </h6>
+              <div>
+                <button class="btn btn-sm btn-outline-success me-2" onclick="exportCSV()">
+                  <span class="me-1">📥</span>Exportar
+                </button>
+                <button class="btn btn-sm btn-outline-primary" onclick="loadDashboard()">
+                  <span class="me-1">🔄</span>Atualizar
+                </button>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table mb-0">
+                  <thead class="table-dark">
+                    <tr>
+                      <th style="width: 12%;">Data/Hora</th>
+                      <th style="width: 25%;">Produto</th>
+                      <th style="width: 10%;">Tipo</th>
+                      <th style="width: 8%;">Qtd.</th>
+                      <th style="width: 12%;">Canal</th>
+                      <th style="width: 15%;">Valor (R$)</th>
+                      <th style="width: 15%;">Lucro (R$)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashboardTable">
+                    <tr>
+                      <td colspan="7" class="text-center py-4 text-muted">
+                        <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                        Carregando movimentações...
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="card">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <h6 class="mb-0">📋 Últimas Movimentações</h6>
-            <button class="btn btn-sm btn-outline-primary" onclick="exportData()">📥 Exportar CSV</button>
-          </div>
-          <div class="card-body p-0">
-            <div class="table-responsive">
-              <table class="table table-hover mb-0">
-                <thead class="table-dark">
-                  <tr>
-                    <th>Data</th>
-                    <th>Produto</th>
-                    <th>Tipo</th>
-                    <th>Qtd.</th>
-                    <th>Canal</th>
-                    <th>Valor</th>
-                    <th>Lucro</th>
-                  </tr>
-                </thead>
-                <tbody id="dashboard-table">
-                  <tr><td colspan="7" class="text-center py-4">Clique "Atualizar" para carregar dados</td></tr>
-                </tbody>
-              </table>
+        <!-- Produtos Tab -->
+        <div class="tab-pane fade" id="produtos" role="tabpanel">
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0 fw-semibold">
+                <span class="me-2">📦</span>Gerenciar Produtos
+              </h6>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Produtos Tab -->
-      <div class="tab-pane fade" id="produtos" role="tabpanel">
-        <div class="card">
-          <div class="card-header">
-            <h6 class="mb-0">➕ Gerenciar Produtos</h6>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-8">
-                <input type="text" id="produto-nome" class="form-control mb-2" placeholder="Nome do produto">
-                <div class="row">
-                  <div class="col-md-6">
-                    <input type="number" id="produto-custo" class="form-control mb-2" step="0.01" placeholder="Custo (R$)">
+            <div class="card-body">
+              <!-- Formulário de Produto -->
+              <div class="row g-3 mb-4">
+                <div class="col-md-8">
+                  <div class="row g-2">
+                    <div class="col-md-6">
+                      <input type="text" id="produtoNome" class="form-control" placeholder="Nome do produto (ex: Camiseta Azul)" required>
+                    </div>
+                    <div class="col-md-3">
+                      <input type="number" id="produtoCusto" class="form-control" step="0.01" placeholder="Custo R$" min="0" required>
+                    </div>
+                    <div class="col-md-3">
+                      <input type="number" id="produtoVenda" class="form-control" step="0.01" placeholder="Venda R$" min="0" required>
+                    </div>
                   </div>
-                  <div class="col-md-6">
-                    <input type="number" id="produto-venda" class="form-control mb-2" step="0.01" placeholder="Venda (R$)">
+                  <div class="mt-2">
+                    <input type="number" id="produtoEstoque" class="form-control" placeholder="Estoque inicial" min="0" value="0">
                   </div>
                 </div>
-                <input type="number" id="produto-estoque" class="form-control mb-2" placeholder="Estoque inicial">
+                <div class="col-md-4 d-flex align-items-end gap-2">
+                  <button class="btn btn-success flex-fill" onclick="saveProduto()">
+                    <span class="me-1">💾</span>Salvar Produto
+                  </button>
+                  <button class="btn btn-secondary flex-fill" onclick="clearProdutoForm()">
+                    <span class="me-1">🗑️</span>Limpar
+                  </button>
+                </div>
               </div>
-              <div class="col-md-4 d-flex align-items-end">
-                <button class="btn btn-success w-100 mb-2" onclick="addProduto()">➕ Adicionar</button>
-                <button class="btn btn-warning w-100" onclick="loadProdutos()">🔄 Recarregar</button>
+
+              <!-- Tabela de Produtos -->
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Nome</th>
+                      <th style="width: 12%;">Custo</th>
+                      <th style="width: 12%;">Venda</th>
+                      <th style="width: 10%;">Estoque</th>
+                      <th style="width: 15%;">Lucro Unit.</th>
+                      <th style="width: 18%;">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="produtosTable">
+                    <tr>
+                      <td colspan="6" class="text-center py-4 text-muted">
+                        Nenhum produto cadastrado. Adicione o primeiro!
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-            </div>
-            
-            <hr>
-            
-            <div class="table-responsive">
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Custo</th>
-                    <th>Venda</th>
-                    <th>Estoque</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="produtos-table">
-                  <tr><td colspan="5" class="text-center">Nenhum produto cadastrado</td></tr>
-                </tbody>
-              </table>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Movimentações Tab -->
-      <div class="tab-pane fade" id="movimentacoes" role="tabpanel">
-        <div class="card">
-          <div class="card-header">
-            <h6 class="mb-0">📦 Registrar Movimentação</h6>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-6">
-                <label class="form-label">Produto</label>
-                <select id="mov-produto" class="form-select mb-2">
-                  <option value="">Selecione...</option>
-                </select>
-              </div>
-              <div class="col-md-3">
-                <label class="form-label">Tipo</label>
-                <select id="mov-tipo" class="form-select mb-2">
-                  <option value="entrada">📥 Entrada</option>
-                  <option value="saida">📤 Saída</option>
-                </select>
-              </div>
-              <div class="col-md-3">
-                <label class="form-label">Canal</label>
-                <select id="mov-canal" class="form-select mb-2">
-                  <option value="online">🛒 Online</option>
-                  <option value="fisica">🏪 Física</option>
-                </select>
-              </div>
+        <!-- Movimentações Tab -->
+        <div class="tab-pane fade" id="movimentacoes" role="tabpanel">
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0 fw-semibold">
+                <span class="me-2">📋</span>Registrar Nova Movimentação
+              </h6>
             </div>
-            <div class="row">
-              <div class="col-md-6">
-                <label class="form-label">Quantidade</label>
-                <input type="number" id="mov-quantidade" class="form-control" min="1" value="1">
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold">Produto</label>
+                  <select id="movProduto" class="form-select" required>
+                    <option value="">Selecione um produto...</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label fw-semibold">Tipo</label>
+                  <select id="movTipo" class="form-select">
+                    <option value="entrada">📥 Entrada</option>
+                    <option value="saida">📤 Saída</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label fw-semibold">Canal</label>
+                  <select id="movCanal" class="form-select">
+                    <option value="online">🛒 Online</option>
+                    <option value="fisica">🏪 Física</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label fw-semibold">Quantidade</label>
+                  <input type="number" id="movQuantidade" class="form-control" value="1" min="1" required>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                  <button class="btn btn-primary w-100" onclick="saveMovimentacao()">
+                    <span class="me-1">💾</span>Registrar
+                  </button>
+                </div>
               </div>
-              <div class="col-md-6">
-                <label class="form-label">Data</label>
-                <input type="date" id="mov-data" class="form-control" value="">
+              
+              <div class="mt-3 p-3 bg-light rounded">
+                <h6 class="mb-2">ℹ️ Como usar:</h6>
+                <ul class="mb-0 small text-muted">
+                  <li><strong>Entrada:</strong> Adiciona ao estoque (compras)</li>
+                  <li><strong>Saída:</strong> Remove do estoque (vendas)</li>
+                  <li>Verifique o estoque antes de registrar saídas</li>
+                </ul>
               </div>
-            </div>
-            <button class="btn btn-primary w-100 mt-3" onclick="addMovimentacao()">💾 Registrar</button>
-            
-            <div class="alert alert-info mt-3" role="alert">
-              <small><strong>Dica:</strong> Para entrada, estoque aumenta. Para saída, diminui. Verifique estoque antes de vender!</small>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Configurações Tab -->
-      <div class="tab-pane fade" id="config" role="tabpanel">
-        <div class="card">
-          <div class="card-header">
-            <h6 class="mb-0">⚙️ Configurações e Backup</h6>
-          </div>
-          <div class="card-body">
-            <div class="mb-3">
-              <h6>🔐 Usuário</h6>
-              <p><strong>Usuário:</strong> <span id="config-user">admin</span></p>
-              <p><strong>Senha:</strong> <span class="text-muted">senha123 (padrão)</span></p>
-              <button class="btn btn-sm btn-outline-secondary" onclick="resetUser()">🔄 Redefinir</button>
-            </div>
-            
-            <hr>
-            
-            <div class="mb-3">
-              <h6>💾 Backup e Restauração</h6>
-              <div class="row">
-                <div class="col-md-6">
-                  <button class="btn btn-success w-100 mb-2" onclick="exportData()">📥 Baixar Backup (CSV)</button>
-                  <button class="btn btn-info w-100 mb-2" onclick="exportDataJSON()">📥 Baixar JSON</button>
+        <!-- Configurações Tab -->
+        <div class="tab-pane fade" id="config" role="tabpanel">
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-header">
+                  <h6 class="mb-0 fw-semibold">
+                    <span class="me-2">🔐</span>Conta de Usuário
+                  </h6>
                 </div>
-                <div class="col-md-6">
-                  <label class="form-label">Importar dados</label>
-                  <input type="file" id="import-file" class="form-control" accept=".json,.csv" onchange="importData(event)">
+                <div class="card-body">
+                  <div class="mb-3">
+                    <label class="form-label">Usuário Atual</label>
+                    <input type="text" id="currentUser" class="form-control" readonly>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <button class="btn btn-outline-primary w-100" onclick="changePassword()">
+                        <span class="me-1">🔑</span>Mudar Senha
+                      </button>
+                    </div>
+                    <div class="col-md-6">
+                      <button class="btn btn-outline-secondary w-100" onclick="resetPassword()">
+                        <span class="me-1">🔄</span>Resetar Padrão
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
             
-            <hr>
-            
-            <div class="mb-3">
-              <h6>🗑️ Limpeza</h6>
-              <button class="btn btn-danger w-100" onclick="clearAllData()">🗑️ Limpar Todos os Dados</button>
-              <div class="form-text">⚠️ Isso apagará produtos, movimentações e configurações. Não é possível desfazer.</div>
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-header">
+                  <h6 class="mb-0 fw-semibold">
+                    <span class="me-2">💾</span>Backup & Restauração
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <div class="d-grid gap-2">
+                    <button class="btn btn-success" onclick="exportData('csv')">
+                      <span class="me-2">📊</span>Exportar CSV
+                    </button>
+                    <button class="btn btn-info" onclick="exportData('json')">
+                      <span class="me-2">📄</span>Exportar JSON
+                    </button>
+                    <label class="btn btn-outline-secondary">
+                      <span class="me-2">📤</span>Importar
+                      <input type="file" id="importFile" accept=".json,.csv" style="display: none;" onchange="importData(event)">
+                    </label>
+                  </div>
+                </div>
+              </div>
             </div>
-            
-            <hr>
-            
-            <div class="text-center">
+          </div>
+          
+          <div class="card mt-4">
+            <div class="card-header">
+              <h6 class="mb-0 fw-semibold">
+                <span class="me-2">🗑️</span>Limpeza de Dados
+              </h6>
+            </div>
+            <div class="card-body">
+              <div class="alert alert-warning">
+                <h6 class="alert-heading">⚠️ Atenção!</h6>
+                <p class="mb-2">A ação abaixo <strong>apagará todos os dados</strong> permanentemente:</p>
+                <ul class="mb-0 small">
+                  <li>📦 Todos os produtos</li>
+                  <li>📋 Todas as movimentações</li>
+                  <li>💰 Histórico de vendas e lucros</li>
+                </ul>
+              </div>
+              <button class="btn btn-danger w-100" onclick="clearAllData()">
+                <span class="me-2">🗑️</span>Limpar Todos os Dados
+              </button>
+            </div>
+          </div>
+
+          <div class="card mt-4">
+            <div class="card-body text-center">
+              <h6 class="text-muted">ℹ️ Sobre o Sistema</h6>
               <p class="text-muted small">
-                <strong>Sobre:</strong> Controle de Loja v1.0<br>
-                Desenvolvido para GitHub Pages | Dados salvos localmente
+                <strong>Controle de Loja v2.0</strong><br>
+                Sistema local com armazenamento no navegador<br>
+                <a href="https://github.com/SEU_USUARIO/controle-loja" target="_blank" class="text-primary">Ver no GitHub</a>
               </p>
             </div>
           </div>
@@ -309,10 +593,897 @@
     </div>
   </div>
 
-  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/utils.js"></script>
-  <script src="js/storage.js"></script>
-  <script src="js/app.js"></script>
+  <script>
+    // ========================================
+    // BANCO DE DADOS LOCAL (localStorage)
+    // ========================================
+    
+    class LojaDatabase {
+      constructor() {
+        this.dbName = 'controle_loja_db_v2';
+        this.init();
+      }
+      
+      init() {
+        const defaultData = {
+          version: '2.0',
+          config: {
+            createdAt: new Date().toISOString(),
+            lastBackup: null
+          },
+          produtos: [
+            {
+              id: 'demo1',
+              nome: 'Camiseta Básica',
+              preco_custo: 25.00,
+              preco_venda: 45.00,
+              estoque: 50,
+              createdAt: new Date().toISOString()
+            },
+            {
+              id: 'demo2',
+              nome: 'Calça Jeans',
+              preco_custo: 80.00,
+              preco_venda: 150.00,
+              estoque: 30,
+              createdAt: new Date().toISOString()
+            }
+          ],
+          movimentacoes: [
+            {
+              id: 'mov1',
+              produtoId: 'demo1',
+              tipo: 'saida',
+              quantidade: 2,
+              canal: 'fisica',
+              data: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2h atrás
+              createdAt: new Date().toISOString()
+            },
+            {
+              id: 'mov2',
+              produtoId: 'demo1',
+              tipo: 'entrada',
+              quantidade: 10,
+              canal: 'online',
+              data: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // ontem
+              createdAt: new Date().toISOString()
+            }
+          ]
+        };
+        
+        const saved = localStorage.getItem(this.dbName);
+        if (!saved) {
+          this.data = defaultData;
+          this.save();
+        } else {
+          try {
+            this.data = JSON.parse(saved);
+            if (this.data.version !== '2.0') {
+              // Migração necessária
+              this.data = { ...defaultData, ...this.data };
+              this.save();
+            }
+          } catch (e) {
+            console.error('Erro ao carregar banco:', e);
+            this.data = defaultData;
+            this.save();
+          }
+        }
+      }
+      
+      save() {
+        try {
+          localStorage.setItem(this.dbName, JSON.stringify(this.data));
+          return true;
+        } catch (e) {
+          console.error('Erro ao salvar:', e);
+          return false;
+        }
+      }
+      
+      // PRODUTOS
+      getProdutos() {
+        return this.data.produtos || [];
+      }
+      
+      addProduto(produto) {
+        const novoId = 'prod_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        const novoProduto = {
+          id: novoId,
+          ...produto,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        
+        this.data.produtos.unshift(novoProduto);
+        return this.save() ? novoProduto : null;
+      }
+      
+      updateProduto(id, updates) {
+        const index = this.data.produtos.findIndex(p => p.id === id);
+        if (index === -1) return false;
+        
+        this.data.produtos[index] = {
+          ...this.data.produtos[index],
+          ...updates,
+          updatedAt: new Date().toISOString()
+        };
+        
+        return this.save();
+      }
+      
+      deleteProduto(id) {
+        // Remove produto
+        this.data.produtos = this.data.produtos.filter(p => p.id !== id);
+        
+        // Remove movimentações relacionadas
+        this.data.movimentacoes = this.data.movimentacoes.filter(m => m.produtoId !== id);
+        
+        return this.save();
+      }
+      
+      // MOVIMENTAÇÕES
+      getMovimentacoes(filtros = {}) {
+        let movs = [...(this.data.movimentacoes || [])];
+        
+        // Filtros
+        if (filtros.canal && filtros.canal !== 'todos') {
+          movs = movs.filter(m => m.canal === filtros.canal);
+        }
+        
+        if (filtros.periodo) {
+          const agora = new Date();
+          let dataInicio;
+          
+          switch (filtros.periodo) {
+            case 'hoje':
+              dataInicio = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
+              break;
+            case 'semana':
+              const diaSemana = agora.getDay();
+              dataInicio = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate() - diaSemana);
+              break;
+            case 'mes':
+              dataInicio = new Date(agora.getFullYear(), agora.getMonth(), 1);
+              break;
+          }
+          
+          movs = movs.filter(m => new Date(m.data) >= dataInicio);
+        }
+        
+        // Ordenar por data (mais recente primeiro)
+        movs.sort((a, b) => new Date(b.data) - new Date(a.data));
+        
+        return movs;
+      }
+      
+      addMovimentacao(movimentacao) {
+        // Validar estoque para saídas
+        if (movimentacao.tipo === 'saida') {
+          const produto = this.data.produtos.find(p => p.id === movimentacao.produtoId);
+          if (!produto || produto.estoque < movimentacao.quantidade) {
+            return { success: false, error: `Estoque insuficiente! Disponível: ${produto?.estoque || 0}` };
+          }
+        }
+        
+        const novoId = 'mov_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        const novaMov = {
+          id: novoId,
+          ...movimentacao,
+          data: movimentacao.data || new Date().toISOString(),
+          createdAt: new Date().toISOString()
+        };
+        
+        this.data.movimentacoes.unshift(novaMov);
+        
+        // Atualizar estoque
+        const produtoIndex = this.data.produtos.findIndex(p => p.id === novaMov.produtoId);
+        if (produtoIndex !== -1) {
+          const delta = novaMov.tipo === 'entrada' ? +novaMov.quantidade : -novaMov.quantidade;
+          this.data.produtos[produtoIndex].estoque += delta;
+          this.data.produtos[produtoIndex].updatedAt = new Date().toISOString();
+        }
+        
+        return this.save() ? novaMov : null;
+      }
+      
+      // ESTATÍSTICAS
+      getEstatisticas() {
+        const produtos = this.getProdutos();
+        const movimentacoes = this.getMovimentacoes();
+        
+        const vendasHoje = movimentacoes.filter(m => 
+          m.tipo === 'saida' && 
+          new Date(m.data).toDateString() === new Date().toDateString()
+        );
+        
+        const totalVendas = movimentacoes.filter(m => m.tipo === 'saida').length;
+        const totalLucro = movimentacoes
+          .filter(m => m.tipo === 'saida')
+          .reduce((sum, m) => {
+            const produto = produtos.find(p => p.id === m.produtoId);
+            return sum + (produto ? (produto.preco_venda - produto.preco_custo) * m.quantidade : 0);
+          }, 0);
+        
+        const totalEstoque = produtos.reduce((sum, p) => sum + p.estoque, 0);
+        
+        return {
+          totalVendasHoje: vendasHoje.length,
+          totalVendas,
+          totalLucro,
+          totalProdutos: produtos.length,
+          totalEstoque
+        };
+      }
+      
+      // BACKUP
+      exportData(formato = 'csv') {
+        const data = {
+          config: this.data.config,
+          produtos: this.data.produtos,
+          movimentacoes: this.data.movimentacoes,
+          exportedAt: new Date().toISOString()
+        };
+        
+        if (formato === 'csv') {
+          return this.toCSV(data);
+        }
+        return JSON.stringify(data, null, 2);
+      }
+      
+      toCSV(data) {
+        let csv = 'TIPO,DADOS\n';
+        
+        // Produtos
+        csv += 'PRODUTO,' + data.produtos.map(p => 
+          [p.nome, p.preco_custo, p.preco_venda, p.estoque, p.createdAt]
+            .map(v => `"${v}"`).join('|')
+        ).join(';') + '\n';
+        
+        // Movimentações
+        csv += 'MOVIMENTACAO,' + data.movimentacoes.map(m => 
+          [m.produtoId, m.tipo, m.quantidade, m.data, m.canal, m.createdAt]
+            .map(v => `"${v}"`).join('|')
+        ).join(';') + '\n';
+        
+        return csv;
+      }
+      
+      importData(content, formato = 'json') {
+        try {
+          let imported;
+          if (formato === 'csv') {
+            imported = this.parseCSV(content);
+          } else {
+            imported = JSON.parse(content);
+          }
+          
+          if (!imported.produtos || !imported.movimentacoes) {
+            return { success: false, error: 'Formato inválido' };
+          }
+          
+          // Merge com dados existentes
+          this.data.produtos.push(...imported.produtos);
+          this.data.movimentacoes.push(...imported.movimentacoes);
+          
+          // Remover duplicatas
+          this.data.produtos = this.data.produtos.filter((p, i, arr) => 
+            arr.findIndex(p2 => p2.id === p.id) === i
+          );
+          this.data.movimentacoes = this.data.movimentacoes.filter((m, i, arr) => 
+            arr.findIndex(m2 => m2.id === m.id) === i
+          );
+          
+          this.data.config.lastImport = new Date().toISOString();
+          return { success: this.save(), count: imported.produtos.length + imported.movimentacoes.length };
+        } catch (e) {
+          return { success: false, error: 'Erro ao importar: ' + e.message };
+        }
+      }
+      
+      parseCSV(csv) {
+        const lines = csv.split('\n');
+        const data = { produtos: [], movimentacoes: [] };
+        
+        lines.forEach(line => {
+          if (line.startsWith('PRODUTO,')) {
+            const produtos = line.split(',')[1];
+            if (produtos) {
+              produtos.split(';').forEach(prod => {
+                const [nome, custo, venda, estoque, createdAt] = prod.split('|').map(v => v.replace(/"/g, ''));
+                if (nome) {
+                  data.produtos.push({
+                    id: 'imp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                    nome,
+                    preco_custo: parseFloat(custo),
+                    preco_venda: parseFloat(venda),
+                    estoque: parseInt(estoque),
+                    createdAt: createdAt || new Date().toISOString()
+                  });
+                }
+              });
+            }
+          } else if (line.startsWith('MOVIMENTACAO,')) {
+            const movs = line.split(',')[1];
+            if (movs) {
+              movs.split(';').forEach(mov => {
+                const [produtoId, tipo, quantidade, data, canal, createdAt] = mov.split('|').map(v => v.replace(/"/g, ''));
+                if (produtoId && tipo) {
+                  data.movimentacoes.push({
+                    id: 'imp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                    produtoId,
+                    tipo,
+                    quantidade: parseInt(quantidade),
+                    data: data || new Date().toISOString(),
+                    canal,
+                    createdAt: createdAt || new Date().toISOString()
+                  });
+                }
+              });
+            }
+          }
+        });
+        
+        return data;
+      }
+      
+      clearAll() {
+        localStorage.removeItem(this.dbName);
+        this.init();
+        return true;
+      }
+    }
+
+    // ========================================
+    // APLICAÇÃO PRINCIPAL
+    // ========================================
+    
+    const db = new LojaDatabase();
+    let currentUser = null;
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', function() {
+      // Verificar autenticação
+      checkAuth();
+      
+      // Configurar event listeners
+      setupEventListeners();
+      
+      // Carregar dados iniciais
+      if (document.getElementById('appMain').style.display !== 'none') {
+        loadAllData();
+      }
+    });
+
+    function checkAuth() {
+      const savedSession = localStorage.getItem('controle-loja-session');
+      if (!savedSession) {
+        // Não autenticado - redirecionar para login
+        window.location.href = 'index.html';
+        return;
+      }
+      
+      try {
+        const session = JSON.parse(savedSession);
+        if (session.expires > Date.now()) {
+          currentUser = session;
+          document.getElementById('userName').textContent = session.username;
+          document.getElementById('loadingScreen').style.display = 'none';
+          document.getElementById('appMain').style.display = 'block';
+          
+          // Auto-load dashboard
+          setTimeout(() => {
+            loadDashboard();
+          }, 500);
+        } else {
+          localStorage.removeItem('controle-loja-session');
+          window.location.href = 'index.html';
+        }
+      } catch (e) {
+        localStorage.removeItem('controle-loja-session');
+        window.location.href = 'index.html';
+      }
+    }
+
+    function setupEventListeners() {
+      // Filtro de período
+      document.getElementById('filterPeriodo').addEventListener('change', function() {
+        const value = this.value;
+        const dataInput = document.getElementById('filterData');
+        
+        if (value && value !== '') {
+          dataInput.style.display = 'block';
+          dataInput.value = new Date().toISOString().split('T')[0]; // Data atual
+        } else {
+          dataInput.style.display = 'none';
+        }
+      });
+
+      // Enter em inputs numéricos
+      document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            const form = this.closest('.card-body');
+            if (form.querySelector('#movProduto') && this.id === 'movQuantidade') {
+              saveMovimentacao();
+            } else if (form.querySelector('#produtoNome')) {
+              saveProduto();
+            }
+          }
+        });
+      });
+    }
+
+    function logout() {
+      if (confirm('Deseja realmente sair do sistema?')) {
+        localStorage.removeItem('controle-loja-session');
+        localStorage.removeItem('controle-loja-user');
+        window.location.href = 'index.html';
+      }
+    }
+
+    // ========================================
+    // CARREGAMENTO DE DADOS
+    // ========================================
+
+    function loadAllData() {
+      loadDashboard();
+      loadProdutos();
+      updateMovimentoSelect();
+      updateStats();
+    }
+
+    function loadProdutos() {
+      const produtos = db.getProdutos();
+      const tbody = document.getElementById('produtosTable');
+      
+      if (produtos.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="text-center py-4">
+              <div class="text-muted">
+                <i class="fas fa-box-open fa-3x mb-3 d-block"></i>
+                <p>Nenhum produto cadastrado</p>
+                <small>Use o formulário acima para adicionar o primeiro produto!</small>
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      tbody.innerHTML = produtos.map(produto => {
+        const lucroUnitario = produto.preco_venda - produto.preco_custo;
+        const badgeClass = produto.estoque <= 5 ? 'low-stock badge-warning' : 'badge-success';
+        
+        return `
+          <tr>
+            <td>
+              <strong>${escapeHtml(produto.nome)}</strong>
+              <br><small class="text-muted">${new Date(produto.updatedAt).toLocaleDateString('pt-BR')}</small>
+            </td>
+            <td class="text-success fw-bold">R$ ${produto.preco_custo.toFixed(2)}</td>
+            <td class="text-primary fw-bold">R$ ${produto.preco_venda.toFixed(2)}</td>
+            <td>
+              <span class="${badgeClass}">${produto.estoque}</span>
+            </td>
+            <td class="text-success fw-bold">R$ ${lucroUnitario.toFixed(2)}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary me-1" onclick="editProduto('${produto.id}')" title="Editar">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" onclick="deleteProduto('${produto.id}')" title="Excluir">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function loadDashboard() {
+      const canal = document.getElementById('filterCanal').value;
+      const periodo = document.getElementById('filterPeriodo').value;
+      const data = document.getElementById('filterData').value;
+      
+      const filtros = { canal };
+      if (periodo && data) {
+        filtros.periodo = periodo;
+      }
+      
+      const movimentacoes = db.getMovimentacoes(filtros);
+      const produtos = db.getProdutos();
+      const tbody = document.getElementById('dashboardTable');
+      
+      if (movimentacoes.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="text-center py-5">
+              <div class="text-muted">
+                <i class="fas fa-chart-line fa-3x mb-3 d-block opacity-50"></i>
+                <h5>Nenhuma movimentação encontrada</h5>
+                <p class="mb-0">Tente ajustar os filtros ou registre a primeira venda!</p>
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      tbody.innerHTML = movimentacoes.slice(0, 25).map(mov => {
+        const produto = produtos.find(p => p.id === mov.produtoId);
+        if (!produto) return '';
+        
+        const dataFormatada = new Date(mov.data).toLocaleString('pt-BR', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        
+        const valor = mov.tipo === 'saida' ? 
+          `R$ ${(produto.preco_venda * mov.quantidade).toFixed(2)}` : 
+          '<span class="text-muted">-</span>';
+        
+        const lucro = mov.tipo === 'saida' ? 
+          `R$ ${((produto.preco_venda - produto.preco_custo) * mov.quantidade).toFixed(2)}` : 
+          '<span class="text-muted">-</span>';
+        
+        const tipoClass = mov.tipo === 'saida' ? 'text-danger' : 'text-success';
+        const canalIcon = mov.canal === 'online' ? '🛒' : '🏪';
+        
+        return `
+          <tr>
+            <td><small class="text-muted">${dataFormatada}</small></td>
+            <td>
+              <div>
+                <strong>${escapeHtml(produto.nome)}</strong>
+                <br><small class="text-muted">ID: ${mov.produtoId.slice(-6)}</small>
+              </div>
+            </td>
+            <td><span class="${tipoClass} fw-bold">${mov.tipo === 'saida' ? 'Saída' : 'Entrada'}</span></td>
+            <td class="fw-bold">${mov.quantidade}</td>
+            <td><span class="me-1">${canalIcon}</span>${mov.canal === 'online' ? 'Online' : 'Física'}</td>
+            <td class="fw-bold text-primary">${valor}</td>
+            <td class="fw-bold text-success">${lucro}</td>
+          </tr>
+        `;
+      }).join('');
+      
+      // Mostrar contador se há mais registros
+      if (movimentacoes.length > 25) {
+        const footer = document.querySelector('#dashboardTable').parentElement;
+        footer.innerHTML += `
+          <div class="p-3 bg-light border-top text-center">
+            <small class="text-muted">
+              Mostrando ${Math.min(25, movimentacoes.length)} de ${movimentacoes.length} movimentações
+              <button class="btn btn-link btn-sm p-0 ms-2" onclick="loadAllMovimentacoes()">Ver todas</button>
+            </small>
+          </div>
+        `;
+      }
+    }
+
+    function updateMovimentoSelect() {
+      const select = document.getElementById('movProduto');
+      const produtos = db.getProdutos();
+      
+      select.innerHTML = '<option value="">Selecione um produto...</option>';
+      
+      produtos.forEach(produto => {
+        const option = document.createElement('option');
+        option.value = produto.id;
+        option.textContent = `${produto.nome} - R$ ${produto.preco_venda.toFixed(2)} (Estoque: ${produto.estoque})`;
+        select.appendChild(option);
+      });
+    }
+
+    function updateStats() {
+      const stats = db.getEstatisticas();
+      
+      document.getElementById('totalVendas').textContent = stats.totalVendasHoje;
+      document.getElementById('totalLucro').textContent = `R$ ${stats.totalLucro.toFixed(2)}`;
+      document.getElementById('totalProdutos').textContent = stats.totalProdutos;
+      document.getElementById('totalEstoque').textContent = stats.totalEstoque;
+    }
+
+    // ========================================
+    // OPERAÇÕES DE PRODUTOS
+    // ========================================
+
+    function saveProduto() {
+      const nome = document.getElementById('produtoNome').value.trim();
+      const custo = parseFloat(document.getElementById('produtoCusto').value);
+      const venda = parseFloat(document.getElementById('produtoVenda').value);
+      const estoque = parseInt(document.getElementById('produtoEstoque').value) || 0;
+      
+      if (!nome || isNaN(custo) || isNaN(venda) || custo < 0 || venda < 0 || custo >= venda) {
+        showAlert('danger', 'Preencha todos os campos corretamente. O preço de venda deve ser maior que o custo.');
+        return;
+      }
+      
+      const produtoData = { nome, preco_custo: custo, preco_venda: venda, estoque };
+      const resultado = db.addProduto(produtoData);
+      
+      if (resultado) {
+        showAlert('success', `Produto "${nome}" adicionado com sucesso!`);
+        clearProdutoForm();
+        loadProdutos();
+        loadDashboard();
+      } else {
+        showAlert('danger', 'Erro ao salvar produto. Tente novamente.');
+      }
+    }
+
+    function clearProdutoForm() {
+      document.getElementById('produtoNome').value = '';
+      document.getElementById('produtoCusto').value = '';
+      document.getElementById('produtoVenda').value = '';
+      document.getElementById('produtoEstoque').value = '0';
+      document.getElementById('produtoNome').focus();
+    }
+
+    function editProduto(id) {
+      const produto = db.getProdutos().find(p => p.id === id);
+      if (!produto) return;
+      
+      document.getElementById('produtoNome').value = produto.nome;
+      document.getElementById('produtoCusto').value = produto.preco_custo;
+      document.getElementById('produtoVenda').value = produto.preco_venda;
+      document.getElementById('produtoEstoque').value = produto.estoque;
+      
+      // Scroll suave para o form
+      document.getElementById('produtoNome').scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'center' 
+      });
+      
+      // Adicionar botão de cancelar
+      const saveBtn = document.querySelector('#produtos .btn-success');
+      if (!saveBtn.dataset.originalText) {
+        saveBtn.dataset.originalText = saveBtn.innerHTML;
+        saveBtn.innerHTML = '<i class="fas fa-save"></i> Atualizar Produto';
+      }
+    }
+
+    function deleteProduto(id) {
+      if (confirm('Tem certeza que deseja excluir este produto?\n\nTodas as movimentações relacionadas também serão removidas.')) {
+        db.deleteProduto(id);
+        loadProdutos();
+        loadDashboard();
+        updateMovimentoSelect();
+        showAlert('success', 'Produto excluído com sucesso');
+      }
+    }
+
+    // ========================================
+    // OPERAÇÕES DE MOVIMENTAÇÕES
+    // ========================================
+
+    function saveMovimentacao() {
+      const produtoId = document.getElementById('movProduto').value;
+      const tipo = document.getElementById('movTipo').value;
+      const quantidade = parseInt(document.getElementById('movQuantidade').value);
+      const canal = document.getElementById('movCanal').value;
+      
+      if (!produtoId || !quantidade || quantidade <= 0) {
+        showAlert('warning', 'Selecione um produto e informe uma quantidade válida');
+        return;
+      }
+      
+      const resultado = db.addMovimentacao({ 
+        produtoId, 
+        tipo, 
+        quantidade, 
+        canal 
+      });
+      
+      if (resultado && resultado.success !== false) {
+        const produto = db.getProdutos().find(p => p.id === produtoId);
+        const acao = tipo === 'saida' ? 'vendido' : 'adicionado';
+        showAlert('success', `${quantidade}x "${produto?.nome}" ${acao} com sucesso!`);
+        
+        // Limpar form
+        document.getElementById('movQuantidade').value = '1';
+        document.getElementById('movProduto').selectedIndex = 0;
+        
+        // Recarregar dados
+        loadDashboard();
+        loadProdutos();
+        updateMovimentoSelect();
+      } else {
+        showAlert('danger', resultado?.error || 'Erro ao registrar movimentação');
+      }
+    }
+
+    // ========================================
+    // CONFIGURAÇÕES
+    // ========================================
+
+    function changePassword() {
+      const novaSenha = prompt('Digite a nova senha (mínimo 6 caracteres):');
+      if (!novaSenha || novaSenha.length < 6) {
+        showAlert('warning', 'Senha deve ter pelo menos 6 caracteres');
+        return;
+      }
+      
+      const confirmacao = prompt('Confirme a nova senha:');
+      if (novaSenha !== confirmacao) {
+        showAlert('danger', 'As senhas não coincidem');
+        return;
+      }
+      
+      // Atualizar no localStorage
+      const userData = JSON.parse(localStorage.getItem('controle-loja-user') || '{}');
+      userData.password = novaSenha;
+      localStorage.setItem('controle-loja-user', JSON.stringify(userData));
+      
+      showAlert('success', 'Senha alterada com sucesso! Use a nova senha no próximo login.');
+    }
+
+    function resetPassword() {
+      if (confirm('Redefinir para a senha padrão (senha123)?')) {
+        const userData = JSON.parse(localStorage.getItem('controle-loja-user') || '{}');
+        userData.password = 'senha123';
+        localStorage.setItem('controle-loja-user', JSON.stringify(userData));
+        showAlert('success', 'Senha redefinida para "senha123"');
+      }
+    }
+
+    function exportData(formato) {
+      try {
+        const content = db.exportData(formato);
+        const blob = new Blob([content], { type: formato === 'csv' ? 'text/csv' : 'application/json' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        
+        a.href = url;
+        a.download = `backup-controle-loja-${new Date().toISOString().split('T')[0]}.${formato}`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+        showAlert('success', `Backup ${formato.toUpperCase()} baixado com sucesso!`);
+      } catch (e) {
+        showAlert('danger', 'Erro ao gerar backup: ' + e.message);
+      }
+    }
+
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const content = e.target.result;
+        const formato = file.name.endsWith('.csv') ? 'csv' : 'json';
+        
+        const resultado = db.importData(content, formato);
+        
+        if (resultado.success) {
+          showAlert('success', `Importado com sucesso! ${resultado.count} registros adicionados.`);
+          loadAllData();
+          event.target.value = '';
+        } else {
+          showAlert('danger', resultado.error);
+        }
+      };
+      
+      reader.readAsText(file);
+    }
+
+    function clearAllData() {
+      if (confirm('⚠️ ATENÇÃO: Isso apagará TODOS os dados permanentemente!\n\n' +
+                  '• Todos os produtos\n' +
+                  '• Todas as movimentações\n' +
+                  '• Histórico de vendas e lucros\n\n' +
+                  'Deseja realmente continuar?')) {
+        
+        if (confirm('🔴 CONFIRMAÇÃO FINAL\n\nEsta ação NÃO pode ser desfeita.\n' +
+                    'Você perderá todo o histórico da loja.\n\n' +
+                    'Clique "OK" apenas se tiver certeza.')) {
+          
+          db.clearAll();
+          loadAllData();
+          showAlert('warning', 'Todos os dados foram limpos. Adicione novos produtos!');
+          
+          // Redirecionar para login para "resetar" sessão
+          setTimeout(() => {
+            logout();
+          }, 2000);
+        }
+      }
+    }
+
+    // ========================================
+    // UTILITÁRIOS
+    // ========================================
+
+    function showAlert(tipo, mensagem, duracao = 4000) {
+      // Remove alert anterior
+      document.querySelectorAll('.alert-fixed').forEach(el => el.remove());
+      
+      const alert = document.createElement('div');
+      alert.className = `alert alert-${tipo} alert-dismissible fade show alert-fixed`;
+      alert.innerHTML = `
+        <div class="d-flex align-items-center">
+          <i class="fas ${tipo === 'success' ? 'fa-check-circle' : tipo === 'danger' ? 'fa-exclamation-circle' : 'fa-info-circle'} me-2"></i>
+          <div>${mensagem}</div>
+          <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+        </div>
+      `;
+      
+      document.body.appendChild(alert);
+      
+      // Auto-remove
+      setTimeout(() => {
+        if (alert.parentNode) {
+          alert.remove();
+        }
+      }, duracao);
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function formatCurrency(valor) {
+      return new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      }).format(valor);
+    }
+
+    function formatDate(isoString) {
+      return new Date(isoString).toLocaleString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    // ========================================
+    // FUNÇÕES DE EXPORTAÇÃO ESPECÍFICAS
+    // ========================================
+
+    function loadAllMovimentacoes() {
+      // Função para mostrar todas (sem limite de 25)
+      const todas = db.getMovimentacoes({ canal: document.getElementById('filterCanal').value });
+      const produtos = db.getProdutos();
+      
+      document.getElementById('dashboardTable').innerHTML = todas.map(mov => {
+        const produto = produtos.find(p => p.id === mov.produtoId);
+        if (!produto) return '';
+        
+        const dataFormatada = new Date(mov.data).toLocaleString('pt-BR');
+        const valor = mov.tipo === 'saida' ? formatCurrency(produto.preco_venda * mov.quantidade) : '-';
+        const lucro = mov.tipo === 'saida' ? formatCurrency((produto.preco_venda - produto.preco_custo) * mov.quantidade) : '-';
+        
+        return `
+          <tr>
+            <td>${dataFormatada}</td>
+            <td>${escapeHtml(produto.nome)}</td>
+            <td>${mov.tipo === 'saida' ? 'Saída' : 'Entrada'}</td>
+            <td>${mov.quantidade}</td>
+            <td>${mov.canal === 'online' ? 'Online' : 'Física'}</td>
+            <td>${valor}</td>
+            <td>${lucro}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Inicialização final
+    if (typeof checkAuth === 'function') {
+      checkAuth();
+    }
+  </script>
 </body>
 </html>
