@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle de Loja - Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0d6efd">
+</head>
+<body>
+  <!-- Login Screen -->
+  <div id="login-screen" class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow" style="width: 100%; max-width: 400px;">
+      <div class="card-body text-center">
+        <h2 class="card-title mb-4">🔐 Login</h2>
+        <p class="text-muted small mb-3">Credenciais padrão: <strong>admin / senha123</strong></p>
+        <div class="mb-3">
+          <input type="text" id="username" class="form-control" placeholder="Usuário" autocomplete="username">
+        </div>
+        <div class="mb-3">
+          <input type="password" id="password" class="form-control" placeholder="Senha" autocomplete="current-password">
+        </div>
+        <button onclick="login()" class="btn btn-primary w-100 mb-2">Entrar</button>
+        <div class="text-danger small" id="login-error" style="display: none;"></div>
+        <hr>
+        <p class="text-muted small mt-3 mb-0">App local - dados salvos no navegador</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app-screen" class="container-fluid" style="display: none;">
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
+      <div class="container-fluid">
+        <span class="navbar-brand">🏪 Controle de Loja</span>
+        <div class="navbar-nav ms-auto">
+          <span class="navbar-text me-3" id="user-info">Admin</span>
+          <button class="btn btn-outline-light btn-sm" onclick="logout()">Sair</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab">
+          📊 Dashboard
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="produtos-tab" data-bs-toggle="tab" data-bs-target="#produtos" type="button" role="tab">
+          ➕ Produtos
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="movimentacoes-tab" data-bs-toggle="tab" data-bs-target="#movimentacoes" type="button" role="tab">
+          📦 Movimentações
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="config-tab" data-bs-toggle="tab" data-bs-target="#config" type="button" role="tab">
+          ⚙️ Configurações
+        </button>
+      </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="mainTabContent">
+      <!-- Dashboard Tab -->
+      <div class="tab-pane fade show active" id="dashboard" role="tabpanel">
+        <div class="row mb-3">
+          <div class="col-md-3">
+            <label class="form-label">Canal</label>
+            <select id="filtro-canal" class="form-select">
+              <option value="todos">Todos</option>
+              <option value="online">🛒 Online</option>
+              <option value="fisica">🏪 Física</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Período</label>
+            <select id="filtro-periodo" class="form-select">
+              <option value="">Todos</option>
+              <option value="dia">Hoje</option>
+              <option value="semana">Esta Semana</option>
+              <option value="mes">Este Mês</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label" id="data-label">Data Base</label>
+            <input type="date" id="filtro-data" class="form-control" style="display: none;">
+          </div>
+          <div class="col-md-3 d-flex align-items-end">
+            <button class="btn btn-primary w-100" onclick="loadDashboard()">🔄 Atualizar</button>
+          </div>
+        </div>
+        
+        <div class="row mb-3">
+          <div class="col-md-3">
+            <div class="card bg-primary text-white">
+              <div class="card-body text-center">
+                <h5 id="total-vendas">0</h5>
+                <small>Total Vendas</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-success text-white">
+              <div class="card-body text-center">
+                <h5 id="total-lucro">R$ 0,00</h5>
+                <small>Total Lucro</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-info text-white">
+              <div class="card-body text-center">
+                <h5 id="total-produtos">0</h5>
+                <small>Produtos</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-warning text-white">
+              <div class="card-body text-center">
+                <h5 id="total-estoque">0</h5>
+                <small>Estoque Total</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="mb-0">📋 Últimas Movimentações</h6>
+            <button class="btn btn-sm btn-outline-primary" onclick="exportData()">📥 Exportar CSV</button>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead class="table-dark">
+                  <tr>
+                    <th>Data</th>
+                    <th>Produto</th>
+                    <th>Tipo</th>
+                    <th>Qtd.</th>
+                    <th>Canal</th>
+                    <th>Valor</th>
+                    <th>Lucro</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboard-table">
+                  <tr><td colspan="7" class="text-center py-4">Clique "Atualizar" para carregar dados</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Produtos Tab -->
+      <div class="tab-pane fade" id="produtos" role="tabpanel">
+        <div class="card">
+          <div class="card-header">
+            <h6 class="mb-0">➕ Gerenciar Produtos</h6>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-8">
+                <input type="text" id="produto-nome" class="form-control mb-2" placeholder="Nome do produto">
+                <div class="row">
+                  <div class="col-md-6">
+                    <input type="number" id="produto-custo" class="form-control mb-2" step="0.01" placeholder="Custo (R$)">
+                  </div>
+                  <div class="col-md-6">
+                    <input type="number" id="produto-venda" class="form-control mb-2" step="0.01" placeholder="Venda (R$)">
+                  </div>
+                </div>
+                <input type="number" id="produto-estoque" class="form-control mb-2" placeholder="Estoque inicial">
+              </div>
+              <div class="col-md-4 d-flex align-items-end">
+                <button class="btn btn-success w-100 mb-2" onclick="addProduto()">➕ Adicionar</button>
+                <button class="btn btn-warning w-100" onclick="loadProdutos()">🔄 Recarregar</button>
+              </div>
+            </div>
+            
+            <hr>
+            
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Custo</th>
+                    <th>Venda</th>
+                    <th>Estoque</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="produtos-table">
+                  <tr><td colspan="5" class="text-center">Nenhum produto cadastrado</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Movimentações Tab -->
+      <div class="tab-pane fade" id="movimentacoes" role="tabpanel">
+        <div class="card">
+          <div class="card-header">
+            <h6 class="mb-0">📦 Registrar Movimentação</h6>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <label class="form-label">Produto</label>
+                <select id="mov-produto" class="form-select mb-2">
+                  <option value="">Selecione...</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Tipo</label>
+                <select id="mov-tipo" class="form-select mb-2">
+                  <option value="entrada">📥 Entrada</option>
+                  <option value="saida">📤 Saída</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Canal</label>
+                <select id="mov-canal" class="form-select mb-2">
+                  <option value="online">🛒 Online</option>
+                  <option value="fisica">🏪 Física</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <label class="form-label">Quantidade</label>
+                <input type="number" id="mov-quantidade" class="form-control" min="1" value="1">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Data</label>
+                <input type="date" id="mov-data" class="form-control" value="">
+              </div>
+            </div>
+            <button class="btn btn-primary w-100 mt-3" onclick="addMovimentacao()">💾 Registrar</button>
+            
+            <div class="alert alert-info mt-3" role="alert">
+              <small><strong>Dica:</strong> Para entrada, estoque aumenta. Para saída, diminui. Verifique estoque antes de vender!</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Configurações Tab -->
+      <div class="tab-pane fade" id="config" role="tabpanel">
+        <div class="card">
+          <div class="card-header">
+            <h6 class="mb-0">⚙️ Configurações e Backup</h6>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <h6>🔐 Usuário</h6>
+              <p><strong>Usuário:</strong> <span id="config-user">admin</span></p>
+              <p><strong>Senha:</strong> <span class="text-muted">senha123 (padrão)</span></p>
+              <button class="btn btn-sm btn-outline-secondary" onclick="resetUser()">🔄 Redefinir</button>
+            </div>
+            
+            <hr>
+            
+            <div class="mb-3">
+              <h6>💾 Backup e Restauração</h6>
+              <div class="row">
+                <div class="col-md-6">
+                  <button class="btn btn-success w-100 mb-2" onclick="exportData()">📥 Baixar Backup (CSV)</button>
+                  <button class="btn btn-info w-100 mb-2" onclick="exportDataJSON()">📥 Baixar JSON</button>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Importar dados</label>
+                  <input type="file" id="import-file" class="form-control" accept=".json,.csv" onchange="importData(event)">
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            
+            <div class="mb-3">
+              <h6>🗑️ Limpeza</h6>
+              <button class="btn btn-danger w-100" onclick="clearAllData()">🗑️ Limpar Todos os Dados</button>
+              <div class="form-text">⚠️ Isso apagará produtos, movimentações e configurações. Não é possível desfazer.</div>
+            </div>
+            
+            <hr>
+            
+            <div class="text-center">
+              <p class="text-muted small">
+                <strong>Sobre:</strong> Controle de Loja v1.0<br>
+                Desenvolvido para GitHub Pages | Dados salvos localmente
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
